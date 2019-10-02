@@ -8,17 +8,38 @@
     <title>Tic-Tac-Toe</title>
     <script>
         var flag = 0;
+        var O = "";
+        var X = "";
         function SetPoint(obj) {
             if (obj.innerText != "") return;
             if (flag == 0) {
                 obj.innerText = "O";
                 flag = 1;
+                O+= obj.id;
+                CheckStatus(); 
             }
             else {
                 obj.innerText = "X";
                 flag = 0;
+                X += obj.id;
+                CheckStatus(); 
+            }
+            
+        }
+        function CheckStatus()
+        {
+            if (O.includes(123)|| O.includes(456)||O.includes(789)||O.includes(159)||O.includes(359)||O.includes(147)||O.includes(258)||O.includes(369))
+            {
+                alert("O Team win!");
+            }
+            else if (X.includes(123)|| X.includes(456)||X.includes(789)||X.includes(159)||X.includes(359)||X.includes(147)||X.includes(258)||X.includes(369))
+            {
+                alert("X Team win!");
             }
         }
+       
+       
+        
         
     </script>
 </head>
@@ -27,22 +48,22 @@
     <table border="1" id='table1' style="font-size: 70px; text-align: center; cursor: pointer;">
         <caption style="font-size: 20px">圈圈叉叉</caption>
         <tr>
-            <td id="11" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('11'))"></td>
-            <td id="12" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('12'))"></td>
-            <td id="13" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('13'))"></td>
+            <td id="1" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('1'))"></td>
+            <td id="2" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('2'))"></td>
+            <td id="3" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('3'))"></td>
         </tr>
         <tr>
-            <td id="21" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('21'))"></td>
-            <td id="22" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('22'))"></td>
-            <td id="23" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('23'))"></td>
+            <td id="4" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('4'))"></td>
+            <td id="5" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('5'))"></td>
+            <td id="6" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('6'))"></td>
         </tr>
         <tr>
-            <td id="31" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('31'))"></td>
-            <td id="32" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('32'))"></td>
-            <td id="33" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('33'))"></td>
+            <td id="7" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('7'))"></td>
+            <td id="8" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('8'))"></td>
+            <td id="9" style="width:100px; height:100px" onclick="SetPoint(document.getElementById('9'))"></td>
         </tr>
 
     </table>
 </body>
 
-</html> 
+</html>
