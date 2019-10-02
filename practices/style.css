@@ -1,0 +1,71 @@
+#p1 {
+    font-size: 20px;
+    line-height: 200%;
+}
+
+#item0 {
+    list-style-image: url('https://img.icons8.com/office/16/000000/elections.png');
+}
+
+#item1 li {
+    float: left;
+    margin-left: 40px;
+}
+
+#item2 {
+    list-style-image: url('https://img.icons8.com/android/24/000000/small-axe.png');
+}
+
+#block1 {
+    border: 1px red solid;
+}
+
+#block2 {
+    border-left: 2px dotted brown;
+    border-right: medium solid blue;
+    border-top: medium dashed orange;
+    border-bottom: medium dashed grey;
+}
+
+#block3 {
+    border: 1px red solid;
+    border-radius: 5px 10px 15px 20px;
+}
+
+#block4 {
+    border-width: 3px;
+    border-color: blue;
+    border-style: dotted;
+    border-left: 1px;
+    border-left: 2px dotted;
+    border-left: medium dashed green;
+    border-radius: 20px 15px 10px 5px;
+}
+
+img {
+    width: 200px;
+    border-radius: 15px;
+    float: right;
+    margin: 5px;
+}
+
+#p2 {
+    width: 300px;
+    height: 300px;
+    overflow: scroll;
+}
+
+#shopee {
+    background-color: orangered;
+    width: 100%;
+    height: 150px;
+    
+}
+
+#span1 {
+    font-size: 40px;
+    color: whitesmoke;
+    position: relative;
+    top: 50px;
+    left: 400px;
+}
