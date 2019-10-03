@@ -52,11 +52,16 @@ ul {
     background-color: antiquewhite;
     padding: 10px;
 
-    #table1 {
+    #block {
         display: flex;
-        justify-content: space-evenly;
-        flex-wrap: wrap;
+        justify-content: space-around;
         padding:10px;
+
+        #rightblock {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
     }
     #Nineimage {
         display: flex;
