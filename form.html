@@ -7,23 +7,61 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>表單</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: aliceblue;
+            line-height: 30px;
+
+        }
+
+        fieldset {
+            border-radius: 10px;
+        }
+
+        button {
+            border-radius: 5px;
+            margin: 5px;
+            font-size: 15px;
+        }
+    </style>
+    <script>
+        function getElement(name) {
+            return document.getElementById(name);
+        }
+
+        function Button_Submit() {
+
+            var isChecked = getElement('agreement').checked;
+            if (isChecked) return true;
+            alert('必須勾選同意!');
+            return false;
+        }
+
+        window.onload = function () {
+            getElement("form1").onsubmit = function () {
+                return Button_Submit();
+            };
+        };
+
+    </script>
 </head>
 
 <body>
-    <form action = "http://isbaas.azurewebsites.net/WebForms/Form2Mail.aspx?mailto=liuszuyu@yahoo.com.tw&redirect=http://www.google.com" method="POST">
+    <form id="form1"
+        action="http://isbaas.azurewebsites.net/WebForms/Form2Mail.aspx?mailto=liuszuyu@yahoo.com.tw&redirect=http://www.google.com"
+        method="POST">
         <fieldset>
             <legend>個人資料--必填</legend>
             <label for=“fieldName”>姓名:</label>
-            <input type="text" id="fieldName" name="fieldName" placeholder="請輸入姓名"><br />
+            <input type="text" id="fieldName" name="fieldName" placeholder="請輸入姓名" required><br />
             <label for=“fieldpwd”>密碼:</label>
-            <input type="password" id="fieldpwd" name="fieldpwd"><br />
+            <input type="password" id="fieldpwd" name="fieldpwd" required><br />
             <label for=“gender”>性別:</label>
-            <input id="male" type="radio" name="gender">
+            <input id="male" type="radio" name="gender" required>
             <label value=“male”>男</label>
-            <input value="female" type="radio" name="gender">
+            <input value="female" type="radio" name="gender"required>
             <label for=“female”>女</label><br />
-        </fieldset>
-
+        </fieldset><br />
         <fieldset>
             <legend>個人資料--興趣</legend>
             <label for="hobby">興趣:</label>
@@ -35,9 +73,9 @@
             <label for="music">閱讀</label>
             <input type="checkbox" value="movie" name="hobby">
             <label for="music">電影</label><br />
-            <label for="music">專長:</label>
+            <label for="music" style="vertical-align: 30px">專長:</label>
             <textarea id="fieldMultiLineText" cols="40" rows="5"></textarea>
-        </fieldset>
+        </fieldset><br />
         <fieldset>
             <legend>個人資料--地址</legend>
             <label for="postalcode">郵遞區號:</label>
@@ -55,8 +93,11 @@
             <label for="address">其他地址:</label>
             <input type="text" id="address" name="address">
         </fieldset>
+
+        <input type="checkbox" id="agreement" name="agreement" >
+        <label for="agreement">我同意我的個資被使用</label><br>
         <button type=“submit”>送件</button>
-        <button type ="reset">清除</button>
+        <button type="reset">清除</button>
 
 
     </form>
