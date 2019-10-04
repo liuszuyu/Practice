@@ -1,28 +1,36 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-Tw">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <script> function Button1_Click(){
-          var bmi = 0;
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>BMI</title>
+    <script>
+        function Button1_Click() {
+            var bmi = 0;
             H = document.getElementById("height").value / 100;
-            bmi = document.getElementById("weight").value/ (H * H);
+            bmi = document.getElementById("weight").value / (H * H);
             document.getElementById("result").innerHTML = bmi;
         }
-        
-        
     </script>
 </head>
+
 <body>
-    <label for="height">身高:</label>
-    <input type="text" name="height" id="height" value="">
-    <label for="weight">體重:</label>
-    <input type="text" name="weight" id="weight" value=""><br>
-    <label for ="result">結果:</label><span id = "result"></span><br><br>
-    <button id = "button1" onclick="Button1_Click()">計算</button>
-   
-    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="height">身高:</label>
+                <input type="text" class="form-control" name="height" id="height" value="">
+                <label for="weight">體重:</label>
+                <input type="text" class="form-control" name="weight" id="weight" value="">
+                <label for="result">結果:</label><span id="result"></span><br>
+                <button class="btn btn-info" id="button1" onclick="Button1_Click()">計算</button>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
