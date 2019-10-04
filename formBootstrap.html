@@ -8,42 +8,15 @@
     <title>表單</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">
     <style>
         body {
+            line-height: 40px;
             background-color: aliceblue;
-            line-height: 30px;
-
-        }
-
-        fieldset {
-            border-radius: 10px;
-        }
-
-        button {
-            border-radius: 5px;
-            margin: 5px;
-            font-size: 15px;
+            font-family: 'Noto Sans TC', sans-serif;
         }
     </style>
-    <script>
-        function getElement(name) {
-            return document.getElementById(name);
-        }
 
-        function Button_Submit() {
-
-            var isChecked = getElement('agreement').checked;
-            if (isChecked) return true;
-            alert('必須勾選同意!');
-            return false;
-        }
-
-        window.onload = function () {
-            getElement("form1").onsubmit = function () {
-                return Button_Submit();
-            };
-        };
-    </script>
 </head>
 
 <body>
@@ -59,10 +32,11 @@
                         </div>
                         <div class="card-body">
                             <label for=“fieldName”>姓名:</label>
-                            <input type="text" id="fieldName" name="fieldName" placeholder="請輸入姓名" required><br />
+                            <input class="form-control" type="text" id="fieldName" name="fieldName" placeholder="請輸入姓名"
+                                required>
                             <label for=“fieldpwd”>密碼:</label>
-                            <input type="password" id="fieldpwd" name="fieldpwd" minlength="4" placeholder="請至少輸入四個字"
-                                required><br />
+                            <input class="form-control" type="password" id="fieldpwd" name="fieldpwd" minlength="4"
+                                placeholder="請至少輸入四個字" required>
                             <label for=“gender”>性別:</label>
                             <input id="male" type="radio" name="gender" required>
                             <label value=“male”>男</label>
@@ -77,7 +51,7 @@
                         </div>
                         <div class="card-body">
                             <label for="postalcode">郵遞區號:</label>
-                            <input type="text" id="postalcode" name="postalcode"><br />
+                            <input class="form-control" type="text" id="postalcode" name="postalcode">
                             <label for="city">縣市:</label>
                             <select id="city" name="city">
                                 <option value="Taipei">台北</option>
@@ -89,10 +63,12 @@
                                 <option value="Kaohsiung">高雄</option>
                             </select><br />
                             <label for="address">其他地址:</label>
-                            <input type="text" id="address" name="address">
+                            <input class="form-control" type="text" id="address" name="address">
                         </div>
                     </div>
                     <br>
+                    <button type=“submit” class="btn btn-primary">送件</button>
+                    <button type="reset" class="btn btn-primary">清除</button>
                 </div>
 
 
@@ -111,18 +87,15 @@
                             <label for="music">閱讀</label>
                             <input type="checkbox" value="movie" name="hobby">
                             <label for="music">電影</label><br />
-                            <label for="music" style="vertical-align: 30px">專長:</label>
-                            <textarea id="fieldMultiLineText" cols="40" rows="3"></textarea>
+                            <label for="music">專長:</label><br>
+                            <textarea class="form-control" id="fieldMultiLineText" cols="40" rows="4"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <input type="checkbox" id="agreement" name="agreement">
-        <label for="agreement">我同意我的個資被使用</label><br>
-        <button type=“submit” class="btn btn-primary">送件</button>
-        <button type="reset" class="btn btn-primary">清除</button>
+
 
 
     </form>
