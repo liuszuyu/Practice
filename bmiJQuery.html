@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        $(function(){
+            $('#Button1').click(function(e){
+                var textHeight = $('#textHeight').val();
+                var textWeight = $('#textWeight').val();
+                textHeight = textHeight/ 100;
+                var BMI = textWeight / (textHeight * textHeight);
+                $('#result').html( BMI);
+            })
+        })
+    </script>
+    <title>BMI</title>
+</head>
+
+<body>
+    <div class="row" style="margin:10px">
+        <div class="col-6">
+            <h1>BMI計算(改成jQuery版本)</h1>
+            <label>身高:</label>
+            <input class="form-control" id="textHeight" value="0" />
+            <label>體重:</label>
+            <input class="form-control" id="textWeight" value="0" />
+            <br />
+            <button class="btn btn-primary" id="Button1">計算</button>
+            <br /><br>
+            <div class="row">
+              <div class="col-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h6 class="card-title">計算結果</h6><br>
+                    <p class="card-text" id="result"></p>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            
+        </div>
+    </div>
+</body>
+
+</html>
