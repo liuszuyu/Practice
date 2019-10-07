@@ -10,13 +10,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
-        $(function(){
-            $('#Button1').click(function(e){
+        $(function () {
+            $('#Button1').click(function (e) {
                 var textHeight = $('#textHeight').val();
                 var textWeight = $('#textWeight').val();
-                textHeight = textHeight/ 100;
+                textHeight = textHeight / 100;
                 var BMI = textWeight / (textHeight * textHeight);
-                $('#result').html( BMI);
+                $('#result').html(BMI);
             })
         })
     </script>
@@ -34,18 +34,12 @@
             <br />
             <button class="btn btn-primary" id="Button1">計算</button>
             <br /><br>
-            <div class="row">
-              <div class="col-6">
-                <div class="card">
-                  <div class="card-body">
-                    <h6 class="card-title">計算結果</h6><br>
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h6 class="card-title">計算結果:</h6><br>
                     <p class="card-text" id="result"></p>
-                  </div>
                 </div>
-              </div>
-              
             </div>
-            
         </div>
     </div>
 </body>
