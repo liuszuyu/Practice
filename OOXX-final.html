@@ -26,7 +26,6 @@
     <script>
         class OOXX {
             constructor() {
-                /* 初始化 */
                 this.array = [];
                 this.array[0] = ['', '', ''];
                 this.array[1] = ['', '', ''];
@@ -34,12 +33,10 @@
             }
 
             setPoint(x, y, point) {
-                //設定落子
                 this.array[x][y] = point;
             }
 
             HasWinner() {
-                /* 判斷勝利者 */
                 for (let i = 0; i < 3; i++) {
                     if (this.array[i][0] == this.array[i][1] && this.array[i][1] == this.array[i][2]) {
                         return this.array[i][0];
@@ -69,12 +66,8 @@
                 flag = "X";
                 $(obj).text('X');
             }
-            //show
-            //顯示位置
             $('#label1').html("Row" + $(obj).parent().index() + ",Cell" + $(obj).index() + " --> " + $(obj).text());
-            //設定落子f
             game.setPoint($(obj).parent().index(), $(obj).index(), $(obj).text());
-            //有人贏嗎?
             if (game.HasWinner() != '') {
                 $('#label1').html(`<span style='color:red'>${game.HasWinner()} won! </span>`);
             }
