@@ -76,7 +76,7 @@
             game.setPoint($(obj).parent().index(), $(obj).index(), $(obj).text());
             //有人贏嗎?
             if (game.HasWinner() != '') {
-                $('#label1').html(`<span style='color:red'>${game.HasWinner()} 獲勝! </span>`);
+                $('#label1').html(`<span style='color:red'>${game.HasWinner()} won! </span>`);
             }
         }
 
