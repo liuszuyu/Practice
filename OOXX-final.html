@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>圈圈叉叉-類別版</title>
+    <style>
+        td {
+            text-align: center;
+            cursor: pointer;
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+
+    <script>
+        class OOXX {
+            constructor() {
+                /* 初始化 */
+                this.array = [];
+                this.array[0] = ['', '', ''];
+                this.array[1] = ['', '', ''];
+                this.array[2] = ['', '', ''];
+            }
+
+            setPoint(x, y, point) {
+                //設定落子
+                this.array[x][y] = point;
+            }
+
+            HasWinner() {
+                /* 判斷勝利者 */
+                for (let i = 0; i < 3; i++) {
+                    if (this.array[i][0] == this.array[i][1] && this.array[i][1] == this.array[i][2]) {
+                        return this.array[i][0];
+                    } else if (this.array[0][i] == this.array[1][i] && this.array[1][i] == this.array[2][i]) {
+                        return this.array[0][i];
+                    }
+                }
+                if (this.array[0][0] == this.array[1][1] && this.array[1][1] == this.array[2][2]) {
+                    return this.array[0][0];
+                } else if (this.array[2][0] == this.array[1][1] && this.array[1][1] == this.array[0][2]) {
+                    return this.array[2][0];
+                }
+                return '';
+            }
+        }
+
+        var flag = "";
+        var game = new OOXX();
+
+        function SetPoint(obj) {
+            //alert(obj);
+            if ($(obj).text() != "") return;
+            if (flag == "X") {
+                flag = "O";
+                $(obj).text('O');
+            } else {
+                flag = "X";
+                $(obj).text('X');
+            }
+            //show
+            //顯示位置
+            $('#label1').html("Row" + $(obj).parent().index() + ",Cell" + $(obj).index() + " --> " + $(obj).text());
+            //設定落子f
+            game.setPoint($(obj).parent().index(), $(obj).index(), $(obj).text());
+            //有人贏嗎?
+            if (game.HasWinner() != '') {
+                $('#label1').html(`<span style='color:red'>${game.HasWinner()} 獲勝! </span>`);
+            }
+        }
+
+        $(document).ready(function () {
+            $('td').click(function () {
+                SetPoint(this);
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <h3 class="text-center">OOXX遊戲</h3>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4"></div>
+
+            <div class="col-md-4">
+                <div id="game" style="font-size: 60px">
+                    <table border="1">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+                Description:<label id=label1></label>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+</body>
+
+</html>
