@@ -52,7 +52,7 @@
                     k]) : (("00" + o[k]).substr(("" + o[k]).length)));
             return fmt;
         }
-        
+
         function ButtonPause() {
             isPause = true;
         }
@@ -70,25 +70,24 @@
         var isPause = false;
 
         function showtime() {
-            if (isPause== true) return;
+            if (isPause == true) return;
             var dt = new Date();
-            document.getElementById("clock").innerText = dt.Format("yyyy-MM-dd HH:mm:ss");
+            $('#clock').text(dt.Format("yyyy-MM-dd HH:mm:ss"));
             setTimeout(showtime, 1000);
         }
-
     </script>
 </head>
 
 <body>
     <div class="container">
         <div class="row" style="margin: 10px">
-                <div class="col-6">
-                    <label id="clock" style="font-family: digital" class="h2">test</label><br>
-                    <input class = "btn btn-primary" type="button" id="ButtonStart" onclick="ButtonStart();" value="開始">
-                    <input class = "btn btn-primary" type="button" id="ButtonPause" onclick="ButtonPause();" value="暫停">
-                </div>
+            <div class="col-6">
+                <label id="clock" style="font-family: digital" class="h2">時鐘</label><br>
+                <input class="btn btn-primary" type="button" id="ButtonStart" onclick="ButtonStart();" value="開始">
+                <input class="btn btn-primary" type="button" id="ButtonPause" onclick="ButtonPause();" value="暫停">
             </div>
         </div>
+    </div>
 </body>
 
 </html>
