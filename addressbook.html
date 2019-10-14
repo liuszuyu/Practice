@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="zh-Hant-Tw">
+
+<head>
+    <title>通訊錄</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- https://datatables.net/ -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script>
+        var dat = [
+            ['Eric', '1980/1/1', '0912345678', 'eric@gmail.com', '台北市光復南路179號13樓'],
+        ];
+
+        function save() {
+            var item = [
+                $('#fieldName').val(),
+                $('#fieldBd').val(),
+                $('#fieldPhone').val(),
+                $('#fieldEmail').val(),
+                $('#fieldAddress').val()
+            ];
+
+            $('#fieldName').val('');
+            $('#fieldBd').val('');
+            $('#fieldPhone').val('');
+            $('#fieldEmail').val('');
+            $('#fieldAddress').val('');
+
+            dat.push(item);
+            SaveData();
+            LoadData()
+
+        }
+
+        function LoadData() {
+            if (localStorage.AddressBook != null) {
+                dat = JSON.parse(localStorage.AddressBook);
+            }
+            RefreshData();
+        }
+
+        function RefreshData() {
+            MyTable.clear();
+            MyTable.rows.add(dat);
+            MyTable.draw();
+        }
+
+        function AddData() {
+            $('#ModalNewData').modal();
+        }
+
+        function SaveData() {
+            localStorage.AddressBook = JSON.stringify(dat);
+        }
+
+        function Export() {
+
+            $('#field_ExportJSON').val(JSON.stringify(dat));
+            $('#field_ExportJSON').attr('readonly', 'readonly');
+            $('#ModalExport').modal();
+        }
+
+        function Import() {
+            $('#field_ImportJSON').val('');
+            $('#ModalImport').modal();
+        }
+
+        function ImportNow() {
+            dat = JSON.parse($('#field_ImportJSON').val());
+            RefreshData();
+        }
+
+        function Update() {
+            var NewItem = [
+                $('#EditfieldName').val(),
+                $('#EditfieldBd').val(),
+                $('#EditfieldPhone').val(),
+                $('#EditfieldEmail').val(),
+                $('#EditfieldAddress').val()
+            ];
+
+            var n = dat.indexOf(CurrentEditItem);
+            dat[n] = NewItem;
+            RefreshData();
+            SaveData();
+        }
+
+        function Delete(){
+            var n = dat.indexOf(CurrentEditItem);
+            dat.splice(n,1);
+            RefreshData();
+            SaveData();
+        }
+
+        $(document).ready(function () {
+            $('#AddData').click(AddData);
+            $('#save').click(save);
+            $('#import').click(Import);
+            $('#export').click(Export);
+            $('#ImportNow').click(ImportNow);
+            $('#Update').click(Update);
+            $('#Delete').click(Delete);
+            $("#copy").click(function () {
+                $("#field_ExportJSON").select();
+                document.execCommand('copy');
+            });
+
+            $('#Table1 tbody').on('click', 'tr', function () {
+                CurrentEditItem = MyTable.row(this).data();
+                $('#ModalEdit').modal();
+                $('#EditfieldName').val(CurrentEditItem[0]);
+                $('#EditfieldBd').val(CurrentEditItem[1]);
+                $('#EditfieldPhone').val(CurrentEditItem[2]);
+                $('#EditfieldEmail').val(CurrentEditItem[3]);
+                $('#EditfieldAddress').val(CurrentEditItem[4]);
+            });
+
+
+            MyTable = $('#Table1').DataTable({
+                data: dat
+            });
+
+            LoadData();
+        });
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
+        <a class="navbar-brand" href="#">個人通訊錄</a>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <button id="AddData" type="button" class="btn btn-primary mx-4">新增</button>
+                <button id="import" type="button" class="btn btn-danger mx-1">匯入</button>
+                <button id="export" type="button" class="btn btn-danger mx-1">匯出</button>
+            </li>
+        </ul>
+        <form class="form-inline ml-auto my-2 my-lg-0 ">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜尋</button>
+            </form>
+    </nav>
+    <div class="modal fade" id="ModalNewData" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">新增資料</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for=“fieldName”>姓名</label>
+                    <input class="form-control" type="text" id="fieldName" name=" fieldName" required>
+                    <label for=“fieldBd”>生日</label>
+                    <input class="form-control" type="text" id="fieldBd" name="fieldBd">
+                    <label for=“fieldPhone”>電話</label>
+                    <input class="form-control" type="text" id="fieldPhone" name="fieldPhone">
+                    <label for=“fieldEmail”>E-mail</label>
+                    <input class="form-control" type="text" id="fieldEmail" name="fieldEmail" required>
+                    <label for=“fieldAddress”>地址</label>
+                    <input class="form-control" type="text" id="fieldAddress" name="fieldAddress">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="save">儲存</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ModalEdit" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">修改/刪除資料</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for=“fieldName”>姓名</label>
+                    <input class="form-control" type="text" id="EditfieldName" name=" fieldName" required>
+                    <label for=“fieldBd”>生日</label>
+                    <input class="form-control" type="text" id="EditfieldBd" name="fieldBd">
+                    <label for=“fieldPhone”>電話</label>
+                    <input class="form-control" type="text" id="EditfieldPhone" name="fieldPhone">
+                    <label for=“fieldEmail”>E-mail</label>
+                    <input class="form-control" type="text" id="EditfieldEmail" name="fieldEmail" required>
+                    <label for=“fieldAddress”>地址</label>
+                    <input class="form-control" type="text" id="EditfieldAddress" name="fieldAddress">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="Update" data-dismiss="modal">更新</button>
+                    <button type="button" class="btn btn-secondary" id = "Delete">刪除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row" style="margin:10px">
+            <div class="col-md-12">
+                <table id="Table1" class="display">
+                    <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>生日</th>
+                            <th>電話</th>
+                            <th>e-mail</th>
+                            <th>地址</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ModalImport" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">匯入</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="field_ImportJSON" class="form-control" cols="60" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="ImportNow">匯入</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ModalExport" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">匯出</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="field_ExportJSON" class="form-control" cols="60" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="copy">複製</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

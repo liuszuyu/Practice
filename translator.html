@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Title</title>
+    <title>線上翻譯</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -22,26 +22,35 @@
                 url: "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=zh-Hant&to=en&to=ja&to=ko&to=es&to=it&to=ar",
                 data: JSON.stringify([{
                     "Text": source
-                }]), 
+                }]),
                 dataType: "json",
                 success: function (response) {
                     $(printArea).val(response[0].translations[option].text);
                 }
             });
+          
+           
         }
 
         $(document).ready(function () {
+            //$('#LeftText').val(localStorage.getItem("Record")); 存取紀錄
+            $('#LeftText').val(localStorage.Record);
+
             $('#ButtonLtoR').click(function (e) {
                 var source = $('#LeftText').val();
                 var option = $('#RightLanguage').val();
-                Translate(source,option,'#RightText');
+                Translate(source, option, '#RightText');
+
+            //localStorage.setItem("Record", source); 儲存紀錄
+                localStorage.Record = source;
             });
             $('#ButtonRtoL').click(function (e) {
                 var source = $('#RightText').val();
                 var option = $('#LeftLanguage').val();
-                Translate(source, option,'#LeftText');
+                Translate(source, option, '#LeftText');
             });
         });
+
     </script>
 
 </head>
@@ -76,8 +85,7 @@
                         <div class="card">
                             <div class="card-header bg-info text-center" style="color:white; font-size:large;">
                                 譯文
-                                <select id="RightLanguage" name="RightLanguage"
-                                    class=" custom-select w-25  float-right">
+                                <select id="RightLanguage" name="RightLanguage" class=" custom-select w-25 float-right">
                                     <option value="0">中文</option>
                                     <option value="1">英文</option>
                                     <option value="2">日文</option>
