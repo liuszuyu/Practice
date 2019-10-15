@@ -20,24 +20,102 @@
             padding: 0;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
     <div id="map"></div>
     <script>
         var map;
+        $(function () {
+
+        });
 
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: 25.0421736, lng: 121.5392888},
+                center: {
+                    lat: 25.0421736,
+                    lng: 121.5392888
+                },
                 zoom: 8
             });
 
             var marker = new google.maps.Marker({
-                position: {lat: 25.042300, lng:  121.538259},
+                position: {
+                    lat: 25.042300,
+                    lng: 121.538259
+                },
                 map: map,
                 title: '億光大樓'
             });
+
+
+
+            var icons = {
+                ubike: {
+                    icon: 'bike.png'
+                },
+                fewBike: {
+                    icon: 'bike_blue.png'
+                }
+            };
+            var features = GetUbikeLocation();
+
+
+
+
+            // Create markers.
+            for (var i = 0; i < features.length; i++) {
+                var marker = new google.maps.Marker({
+                    position: features[i].position,
+                    icon: icons[features[i].type].icon,
+                    map: map
+                });
+            };
+
+        }
+
+        function GetUbikeLocation() {
+            var data = [];
+
+            var opendata = GetOpenData();
+            $.each(opendata.retVal, function (i, item) {
+                if (item.sbi<10)
+                {
+                    var singleItem = {
+                    position: new google.maps.LatLng(item.lat, item.lng),
+                    type: 'fewBike'
+                };
+                }
+                else{
+                    var singleItem = {
+                    position: new google.maps.LatLng(item.lat, item.lng),
+                    type: 'ubike'
+                };
+                }
+              
+                data.push(singleItem);
+            })
+            return data;
+        }
+
+        function GetOpenData() {
+            var ubikelocation;
+            $.ajax({
+                type: "Get",
+                url: "https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.json",
+                success: function (data) {
+                    ubikelocation = data;
+                    console.log('data is', data);
+                },
+                error: function () {
+                    alert('fail');
+                },
+                async: false,
+            });
+            return ubikelocation;
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrOEwVddiWkg1iYEffi1slU0L4qfuuduc&callback=initMap"

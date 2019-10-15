@@ -130,7 +130,7 @@
       var computerNumber = "";
       for (let i = 0; i < 4; i++) {
         n = getRandom();
-        if (computerNumber.indexOf(n) > 0) {
+        if (computerNumber.indexOf(n) != -1) {
           i -= 1;
         } else {
           computerNumber += n;
