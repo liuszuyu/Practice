@@ -63,7 +63,8 @@
                 var marker = new google.maps.Marker({
                     position: features[i].position,
                     icon: icons[features[i].type].icon,
-                    map: map
+                    map: map,
+                    title:features[i].title
                 });
             };
         }
