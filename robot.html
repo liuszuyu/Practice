@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script>
+        var input = ""
+        $(function () {
+            $('#send').click(send);
+            $('#input').keypress(function (e) {
+                if (e.keyCode == "13") {
+                    send();
+                    return false;
+                }
+            });
+        });
+
+
+        function send() {
+            input = $('#input').val();
+            $('#input').val('');
+            if($('#textBox').html() == "")
+            {
+                $('#textBox').html('<b>您問：</b>' + input);
+            }
+            else{
+                $('#textBox').html($('#textBox').html() + '<br><b>您問：</b>' + input);
+            }
+            generateAnswer(input);
+        }
+
+        function generateAnswer(input) {
+            $.ajax({
+                type: "post",
+                headers: {
+                    "Authorization": "EndpointKey 4d806190-93f2-4e25-b741-430152a10dc1",
+                    "Content-Type": "application/json"
+                },
+                url: "https://buildschoolqna.azurewebsites.net/qnamaker/knowledgebases/479bb2cb-37b8-4d66-8343-b13bf0475d9f/generateAnswer",
+                data: JSON.stringify({
+                    "question": input
+                }),
+                dataType: "json",
+                success: whenSuccess,
+                error: function (err) {
+                    alert('fail');
+                }
+            });
+        }
+        
+        function whenSuccess(response) {
+            $(textBox).html($(textBox).html() + "<br><b>客服：</b>" + response.answers[0].answer);
+            $('#textBox').scrollTop($('#textBox')[0].scrollHeight);
+        }
+    </script>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
+            <div class="card ">
+                <div class="card-header bg-primary text-white">
+                    <h5>聊天機器人</h5>
+                </div>
+                <div class="card-body">
+                    <div id="textBox" style="overflow: auto; height:300px"></div>
+                </div>
+                <div class="card-footer">
+                    <form class="form-inline ">
+                        <input class="form-control w-75 m-auto" type="text" name="input" id="input">
+                        <button id="send" type="button" class="btn btn-primary m-2">送出</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -31,56 +31,57 @@
 </head>
 
 <body>
-        <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #e3f2fd;">
-                <a class="navbar-brand" href="#">Youbike站點查詢</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-              
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                      <a class="nav-link" href="#">顯示全部<span class="sr-only">(current)</span></a>
-                    </li>
-                    
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #e3f2fd;">
+        <a class="navbar-brand" href="#">Youbike站點查詢</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         區域查詢
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">中正區</a>
-                        <a class="dropdown-item" href="#">中山區</a>
-                        <a class="dropdown-item" id = "Xinyi" href="#">信義區</a>
-                        <a class="dropdown-item" href="#">內湖區</a>
-                        <a class="dropdown-item" href="#">南港區</a>
-                        <a class="dropdown-item" href="#">北投區</a>
-                        <a class="dropdown-item" href="#">士林區</a>
-                        <a class="dropdown-item" href="#">大同區</a>
-                        <a class="dropdown-item" href="#">大安區</a>
-                        <a class="dropdown-item" href="#">文山區</a>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" value="全區">全區</a>
+                        <a class="dropdown-item" value="中正區">中正區</a>
+                        <a class="dropdown-item" value="中山區">中山區</a>
+                        <a class="dropdown-item" value="信義區">信義區</a>
+                        <a class="dropdown-item" value="內湖區">內湖區</a>
+                        <a class="dropdown-item" value="南港區">南港區</a>
+                        <a class="dropdown-item" value="北投區">北投區</a>
+                        <a class="dropdown-item" value="士林區">士林區</a>
+                        <a class="dropdown-item" value="大同區">大同區</a>
+                        <a class="dropdown-item" value="大安區">大安區</a>
+                        <a class="dropdown-item" value="文山區">文山區</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">三重區</a>
-                        <a class="dropdown-item" href="#">中和區</a>
-                        <a class="dropdown-item" href="#">五股區</a>
-                        <a class="dropdown-item" href="#">汐止區</a>
-                        <a class="dropdown-item" href="#">新店區</a>
-                        <a class="dropdown-item" href="#">土城區</a>
-                        <a class="dropdown-item" href="#">永和區</a>
-                        <a class="dropdown-item" href="#">板橋區</a>
+                        <a class="dropdown-item" value="三重區">三重區</a>
+                        <a class="dropdown-item" value="中和區">中和區</a>
+                        <a class="dropdown-item" value="五股區">五股區</a>
+                        <a class="dropdown-item" value="汐止區">汐止區</a>
+                        <a class="dropdown-item" value="新店區">新店區</a>
+                        <a class="dropdown-item" value="土城區">土城區</a>
+                        <a class="dropdown-item" value="永和區">永和區</a>
+                        <a class="dropdown-item" value="板橋區">板橋區</a>
 
 
-                      </div>
-                    </li>
-                  
-                  </ul>
-                 
-                </div>
-              </nav>
+                    </div>
+                </li>
+
+            </ul>
+
+        </div>
+    </nav>
     <div id="map"></div>
     <script>
         var map;
+        var area = '';
         $(function () {
-            $(Xinyi).click(SelectMap);
+            $('.dropdown-item').select(SelectArea);
         });
 
         function initMap() {
@@ -120,13 +121,9 @@
                     position: features[i].position,
                     icon: icons[features[i].type].icon,
                     map: map,
-                    title:features[i].title
+                    title: features[i].title
                 });
             };
-        }
-
-        function SelectMap(){
-
         }
 
         function GetUbikeLocation() {
@@ -134,30 +131,29 @@
 
             var opendata = GetOpenData();
             $.each(opendata.retVal, function (i, item) {
-                if (item.sbi == 0)
-                {
+                if (item.sbi == 0) {
                     var singleItem = {
-                    position: new google.maps.LatLng(item.lat, item.lng),
-                    type: 'noBike',
-                    title: '目前無可借車輛' + ' /總計:' + item.tot
+                        position: new google.maps.LatLng(item.lat, item.lng),
+                        type: 'noBike',
+                        title: '目前無可借車輛' + ' /總計:' + item.tot
+                    };
+                } else if (item.sbi < 10) {
+                    var singleItem = {
+                        position: new google.maps.LatLng(item.lat, item.lng),
+                        type: 'fewBike',
+                        title: '可借:' + item.sbi + ' / 總計:' + item.tot
+                    };
+                } else {
+                    var singleItem = {
+                        position: new google.maps.LatLng(item.lat, item.lng),
+                        type: 'ubike',
+                        title: '可借:' + item.sbi + ' / 總計:' + item.tot
                     };
                 }
-                else if (item.sbi<10)
-                {
-                    var singleItem = {
-                    position: new google.maps.LatLng(item.lat, item.lng),
-                    type: 'fewBike',
-                    title: '可借:' + item.sbi + ' / 總計:' + item.tot
-                    };
+                if (item.sarea == area || area == '全區' || area == '') {
+                    data.push(singleItem)
                 }
-                else{
-                    var singleItem = {
-                    position: new google.maps.LatLng(item.lat, item.lng),
-                    type: 'ubike',
-                    title: '可借:' + item.sbi + ' / 總計:' + item.tot
-                    };
-                }
-                data.push(singleItem);
+
             })
             return data;
         }
@@ -179,6 +175,14 @@
             return ubikelocation;
         }
 
+        function SelectArea() {
+            area = $(this).val()
+            $(this)
+                .addClass('active')
+                .siblings()
+                .removeClass('active')
+            initMap()
+        }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrOEwVddiWkg1iYEffi1slU0L4qfuuduc&callback=initMap"
         async defer></script>
