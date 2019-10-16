@@ -5,6 +5,11 @@
     <title>Simple Map</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <style>
         /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -26,9 +31,57 @@
 </head>
 
 <body>
+        <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #e3f2fd;">
+                <a class="navbar-brand" href="#">Youbike站點查詢</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+              
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="#">顯示全部<span class="sr-only">(current)</span></a>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        區域查詢
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">中正區</a>
+                        <a class="dropdown-item" href="#">中山區</a>
+                        <a class="dropdown-item" id = "Xinyi" href="#">信義區</a>
+                        <a class="dropdown-item" href="#">內湖區</a>
+                        <a class="dropdown-item" href="#">南港區</a>
+                        <a class="dropdown-item" href="#">北投區</a>
+                        <a class="dropdown-item" href="#">士林區</a>
+                        <a class="dropdown-item" href="#">大同區</a>
+                        <a class="dropdown-item" href="#">大安區</a>
+                        <a class="dropdown-item" href="#">文山區</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">三重區</a>
+                        <a class="dropdown-item" href="#">中和區</a>
+                        <a class="dropdown-item" href="#">五股區</a>
+                        <a class="dropdown-item" href="#">汐止區</a>
+                        <a class="dropdown-item" href="#">新店區</a>
+                        <a class="dropdown-item" href="#">土城區</a>
+                        <a class="dropdown-item" href="#">永和區</a>
+                        <a class="dropdown-item" href="#">板橋區</a>
+
+
+                      </div>
+                    </li>
+                  
+                  </ul>
+                 
+                </div>
+              </nav>
     <div id="map"></div>
     <script>
         var map;
+        $(function () {
+            $(Xinyi).click(SelectMap);
+        });
 
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
@@ -36,7 +89,7 @@
                     lat: 25.0421736,
                     lng: 121.5392888
                 },
-                zoom: 8
+                zoom: 15
             });
 
             var marker = new google.maps.Marker({
@@ -54,6 +107,9 @@
                 },
                 fewBike: {
                     icon: 'bike_blue.png'
+                },
+                noBike: {
+                    icon: 'bike_red.png'
                 }
             };
             var features = GetUbikeLocation();
@@ -69,25 +125,37 @@
             };
         }
 
+        function SelectMap(){
+
+        }
+
         function GetUbikeLocation() {
             var data = [];
 
             var opendata = GetOpenData();
             $.each(opendata.retVal, function (i, item) {
-                if (item.sbi<10)
+                if (item.sbi == 0)
+                {
+                    var singleItem = {
+                    position: new google.maps.LatLng(item.lat, item.lng),
+                    type: 'noBike',
+                    title: '目前無可借車輛' + ' /總計:' + item.tot
+                    };
+                }
+                else if (item.sbi<10)
                 {
                     var singleItem = {
                     position: new google.maps.LatLng(item.lat, item.lng),
                     type: 'fewBike',
                     title: '可借:' + item.sbi + ' / 總計:' + item.tot
-                };
+                    };
                 }
                 else{
                     var singleItem = {
                     position: new google.maps.LatLng(item.lat, item.lng),
                     type: 'ubike',
                     title: '可借:' + item.sbi + ' / 總計:' + item.tot
-                };
+                    };
                 }
                 data.push(singleItem);
             })
