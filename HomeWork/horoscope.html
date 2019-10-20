@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-Hant-Tw">
+
+<head>
+    <title>生命靈數</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+    </script>
+    <script>
+        function CalculateNumber(input) {
+            var n = input.replace(/-/g, '');
+            return (n - 1) % 9 + 1;
+        }
+
+        function zodiac(month, day) {
+            var zodiac = ['', 'capricorn', 'aquarius', 'pisces', 'aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo',
+                'libra', 'scorpio', 'sagittarius', 'capricorn'
+            ];
+            var last_day = ['', 19, 18, 20, 20, 21, 21, 22, 22, 21, 22, 21, 20, 19];
+            return (day > last_day[month]) ? zodiac[month * 1 + 1] : zodiac[month];
+        }
+
+        function getDescription(input, zodiac, lifeNumber) {
+            var index = lifeNumber - 1;
+            $.ajax({
+                type: "Get",
+                url: `http://buildschoolnumerology.azurewebsites.net/api/Number/Numerology?constellation=${zodiac}`,
+                dataType: 'json',
+                success: function (response) {
+                    $('#result').append(
+                        ` <li class="list-group-item">
+                        <button type="button" class="close">&times;</button>
+                     <span id="resultDate" class="badge badge-info">${input}</span> 出生的你，星座是 <I>${response.name}</I><br>
+                            你的生命靈數: ${lifeNumber}.<br>
+                            ${response.lookup[index]}</li>`)
+                    $('.close').click(function () {
+                        $(this).parent().remove()
+                    })
+                }
+            });
+        }
+
+        function buttonResult()
+        {
+            var input = $('#inputDate').val();
+                var month = 0;
+                if (input[5] == 0) {
+                    month = input[6];
+                } else {
+                    month = input[5] + input[6];
+                }
+                var date = input[8] + input[9];
+                $('#resultDate').html(input);
+                getDescription(input, zodiac(month, date), CalculateNumber(input));
+        }
+        $(function () {
+            $('#buttonResult').click(buttonResult);
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <h2>生命靈數</h2>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <form class="form-inline">
+                    <input type="date" name="inputDate" id="inputDate" class="form-control" style="width: 87%" ;>
+                    <button id="buttonResult" type="button" class="btn btn-info ml-1">分析結果</button>
+                </form>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <ul id="result" class="list-group">
+
+
+                </ul>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+
+
+
+    </div>
+</body>
+
+</html>
