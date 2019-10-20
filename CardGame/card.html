@@ -15,14 +15,14 @@
     <style>
         img {
             border: 10px solid transparent !important;
-            height: 170px;
-            width: 120px;
+            height: 140px;
+            width: 100px;
             border-radius: 10%;
         }
 
         span {
             text-align: center;
-            font-size: 60px;
+            font-size: 50px;
             font-family: Microsoft JhengHei;
             color: black;
         }
@@ -61,7 +61,7 @@
             //把所有卡牌設為背面
             $('img').prop('src', 'picture/back.png');
             times = Math.floor(Math.random() * 50); //跑50次
-            Cards[index].addClass("imgs");
+            Cards[index].className = "imgs";
             start();
         }
 
@@ -69,14 +69,14 @@
             //將當前index狀態設為一般(未選取)
             //先清除狀態
             //跑下一張
-            Cards[index].addClass("clear");
+            Cards[index].className = "clear";
             index++;
             //如果超過陣列範圍，則歸零
             if (index > Cards.length - 1) {
                 index = 0
             }
             //將下一張設為選取樣式
-            Cards[index].addClass("imgs").removeClass("clear");
+            Cards[index].className = "imgs";
             if (times > 0) {
                 times--;
                 //倒數幾次的時候翻牌
@@ -99,11 +99,13 @@
             $('#ButtonStart').click(ButtonStart);
             //把頁面上所有Cards放入陣列
             for (var i = 1; i <= 16; i++) {
-                //var index = '#i'+i;
+                var index = '#i'+i;
                 
-                //Card = document.getElementById("i" + i);
+                Card = document.getElementById("i" + i);
          
-                    Cards.push($(`#i${i}`));
+                if (Card) {
+                    Cards.push(Card);
+                }
              
             }
          
@@ -118,7 +120,7 @@
 
 <body>
     <div class="container">
-        <div class="row mt-5 text-center">
+        <div class="row text-center">
             <div class="col-md-2">
                 <img src='picture/back.png' id="i1" alt='' />
             </div>
@@ -138,27 +140,27 @@
                 <img src='picture/back.png' id="i6" alt='' />
             </div>
         </div>
-        <div class="row mt-5 text-center">
+        <div class="row text-center align-items-center">
             <div class="col-md-2">
                 <img src='picture/back.png' id="i16" alt='' />
             </div>
             <div class="col-md-8">
-                <span>抽一張比大小</span><br />
-                <span id="result">...</span>
+                <span>抽一張比大小</span><br/>
+               
             </div>
             <div class="col-2">
                 <img src='picture/back.png' id="i7" alt='' />
             </div>
         </div>
-        <div class="row mt-5 text-center">
+        <div class="row text-center">
             <div class="col-md-2">
                 <img src='picture/back.png' id="i15" alt='' />
             </div>
             <div class="col-md-2">
             </div>
-            <div class="col-md-2">
-            </div>
-            <div class="col-md-2">
+            <div class="col-md-4">
+                    <span id="result">...</span>
+          
 
             </div>
             <div class="col-md-2">
@@ -168,7 +170,7 @@
                 <img src='picture/back.png' id="i8" alt='' />
             </div>
         </div>
-        <div class="row mt-5 text-center">
+        <div class="row text-center">
             <div class="col-md-2">
                 <img src='picture/back.png' id="i14" alt='' />
             </div>
@@ -184,11 +186,11 @@
             <div class="col-md-2">
                 <img src='picture/back.png' id="i10" alt='' />
             </div>
-            <div class="colmd--2">
+            <div class="col-md-2">
                 <img src='picture/back.png' id="i9" alt='' />
             </div>
         </div>
-        <div class="row mt-5">
+        <div class="row mt-2">
             <div class="col">
                 <button type="button" name="" id="ButtonStart" class="btn btn-info btn-lg btn-block">
                     開始

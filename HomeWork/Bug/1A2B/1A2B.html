@@ -34,6 +34,7 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
     <script>
+        var array = new Array(4);
         $(document).ready(function () {
             startGame();
             showAnswer();
@@ -41,10 +42,11 @@
 
         function startGame() {
             document.getElementById("start").onclick = function () {
-                var array = new Array(4);
-                var ran = Math.floor(Math.random() * 10);
+              
+               
                 for (var i = 0; i < 4; i++) {
                     do {
+                        var ran = Math.floor(Math.random() * 10);
                         var exist = false; //exist or not
                         if (array.indexOf(ran) != -1) {
                             exist = true;
@@ -54,7 +56,7 @@
 
                     array[i] = ran;
                 }
-                alert(array[0]);
+              
                 return array;
             };
         };
