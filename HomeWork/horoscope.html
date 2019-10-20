@@ -33,7 +33,7 @@
             var index = lifeNumber - 1;
             $.ajax({
                 type: "Get",
-                url: `http://buildschoolnumerology.azurewebsites.net/api/Number/Numerology?constellation=${zodiac}`,
+                url: `https://buildschoolnumerology.azurewebsites.net/api/Number/Numerology?constellation=${zodiac}`,
                 dataType: 'json',
                 success: function (response) {
                     $('#result').append(
