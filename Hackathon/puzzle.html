@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="zh-Hant-Tw">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style>
+        td {
+            width: 200px;
+            height: 200px;
+            border: 5px solid white;
+            background: url(600x600.jpg);
+            cursor: pointer;
+        }
+
+        .img1 {
+            background-position: left top;
+        }
+
+        .img2 {
+            background-position: center top;
+        }
+
+        .img3 {
+            background-position: right top;
+        }
+
+        .img4 {
+            background-position: left center;
+        }
+
+        .img5 {
+            background-position: center center;
+        }
+
+        .img6 {
+            background-position: right center;
+        }
+
+        .img7 {
+            background-position: left bottom;
+        }
+
+        .img8 {
+            background-position: center bottom;
+        }
+
+        .img9 {
+            background: white;
+            cursor: default;
+        }
+
+        .win {
+            background-position: right bottom;
+        }
+    </style>
+    <script>
+        var array = [];
+        $(function () {
+            $('#start').click(function (e) {
+                $('#C33').removeClass('win').addClass('img9');
+                produceSolvableArray();
+            });
+            $('#restart').click(function (e) {
+                window.location.reload(false);
+            });
+
+            $('td').click(function (e) {
+                var selectID = $(this)[0].id;
+                clickTile(selectID);
+            });
+        });
+
+        function getRandom() {
+            return Math.ceil(Math.random() * 9);
+        }
+
+        function produceSolvableArray() {
+            var inversion = 0;
+            var n = 0;
+            var isContinue = false;
+            while (isContinue != true) {
+                do {
+                    for (var i = 0; i < 9; i++) {
+                        n = getRandom();
+                        if (array.indexOf(n) != -1) {
+                            i -= 1;
+                        } else {
+                            array.push(n);
+                        }
+                    }
+                }
+                while (array.length != 9)
+
+                for (var i = 0; i < 9; i++) {
+                    for (var j = 0; j < i; j++) {
+                        if ((array[i] != 9) && (array[j] != 9) && (array[i] < array[j])) {
+                            inversion++;
+                        }
+                    }
+                }
+                if (inversion % 2 == 0) {
+                    isContinue = true;
+                } else {
+                    isContinue = false;
+                    array = [];
+                }
+            }
+
+            changeClass(array);
+        }
+
+        function changeClass(array) {
+            var i = 0;
+            for (var col = 1; col <= 3; col++) {
+                for (var row = 1; row <= 3; row++) {
+                    $(`#C${row}${col}`)[0].className = "img" + array[i];
+                    i++;
+                }
+            }
+            $('#start').prop('disabled', true);
+        }
+
+        function clickTile(ID) {
+            //var img = document.getElementById(ID).className;
+            var img = $(`#${ID}`).attr('class');
+            var row = parseInt(ID[1]);
+            var col = parseInt(ID[2]);
+
+            if (img != "img9") {
+                //Checking if white img on the right
+                if (col < 3) {
+                    var right = "C" + row + (col + 1);
+                    if ($(`#${right}`).attr('class') == "img9") {
+                        swapTiles(ID, right);
+
+                    }
+                }
+                //Checking if white tile on the left
+                if (col > 1) {
+                    var left = "C" + row + (col - 1);
+                    if ($(`#${left}`).attr('class') == "img9") {
+                        swapTiles(ID, left);
+                    }
+                }
+                //Checking if white tile is above
+                if (row > 1) {
+                    var above = "C" + (row - 1) + col;
+                    if ($(`#${above}`).attr('class') == "img9") {
+                        swapTiles(ID, above);
+                    }
+                }
+                //Checking if white tile is below
+                if (row < 3) {
+                    var below = "C" + (row + 1) + col;
+                    if ($(`#${below}`).attr('class') == "img9") {
+                        swapTiles(ID, below);
+                    }
+                }
+            }
+
+        }
+
+        function swapTiles(before, after) {
+            var temp = $(`#${before}`)[0].className;
+            $(`#${before}`)[0].className = $(`#${after}`)[0].className;
+            $(`#${after}`)[0].className = temp;
+            checkWinGame();
+        }
+
+        function arraysEqual(a1, a2) {
+            return JSON.stringify(a1) == JSON.stringify(a2);
+        }
+
+        function checkWinGame() {
+            var currentArray = [];
+            for (var col = 1; col <= 3; col++) {
+                for (var row = 1; row <= 3; row++) {
+                    var data = $(`#C${row}${col}`)[0].className.replace('img', '');
+                    currentArray.push(parseInt(data));
+                }
+            }
+            var answer = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+            if (arraysEqual(currentArray, answer)) {
+                $('#C33').removeClass('img9').addClass('win');
+                setTimeout(function () {
+                    alert("You win!")
+                }, 500)
+                $('#start').prop('disabled', false);
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <center>
+        <div class="container">
+            <table class="table " style="color:white; width:600px;">
+                <tbody>
+                    <tr>
+                        <td id="C11" class="img1"></td>
+                        <td id="C21" class="img2"></td>
+                        <td id="C31" class="img3"></td>
+                    </tr>
+                    <tr>
+                        <td id="C12" class="img4"></td>
+                        <td id="C22" class="img5"></td>
+                        <td id="C32" class="img6"></td>
+                    </tr>
+                    <tr>
+                        <td id="C13" class="img7"></td>
+                        <td id="C23" class="img8"></td>
+                        <td id="C33" class="win"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button id="start" type="button" class="btn btn-primary">開始遊戲</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">查看原圖</button>
+            <button id="restart" type="button" class="btn btn-primary">重新開始</button>
+            <!-- The Modal -->
+            <div class="modal" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <img src="300x300.jpg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </center>
+
+</body>
+
+</html>
