@@ -88,29 +88,20 @@
         function produceSolvableArray() {
             var inversion = 0;
             var isContinue = false;
+            step = 0;
             while (isContinue != true) {
-                do {
-                    for (var i = 0; i < 9; i++) {
-                        var n = getRandom();
-                        if (array.indexOf(n) != -1) {
-                            i -= 1;
-                        } else {
-                            array.push(n);
-                        }
+                for (var i = 0; i < 9; i++) {
+                    var n = getRandom();
+                    if (array.indexOf(n) != -1) {
+                        i -= 1;
+                    } else {
+                        array.push(n);
                     }
                 }
-                while (array.length != 9)
 
-                // for (var i = 0; i < 8; i++) {
-                //     for (var j = i + 1; j < 9; j++) {
-                //         if (((array[i]!= 9) && (array[j] != 9)) && (array[j] > array[i])) {
-                //             inversion ++;
-                //         }
-                //     }
-                // }
                 for (var i = 0; i < 9; i++) {
                     for (var j = 0; j < i; j++) {
-                        if ((array[i]!= 9) && (array[j] != 9) && (array[i] < array[j])) {
+                        if ((array[i] != 9) && (array[j] != 9) && (array[i] < array[j])) {
                             inversion++;
                         }
                     }
@@ -142,17 +133,16 @@
 
         function clickTile(ID) {
             //var img = document.getElementById(ID).className;
-            var img = $(`#${ID}`).attr('class');
+            var selectedTile = $(`#${ID}`).attr('class');
             var row = parseInt(ID[1]);
             var col = parseInt(ID[2]);
 
-            if (img != "img9") {
+            if (selectedTile != "img9") {
                 //Checking if white img on the right
                 if (col < 3) {
                     var right = "C" + row + (col + 1);
                     if ($(`#${right}`).attr('class') == "img9") {
                         swapTiles(ID, right);
-
                     }
                 }
                 //Checking if white tile on the left
@@ -189,24 +179,39 @@
             checkWinGame();
         }
 
-        function arraysEqual(a1, a2) {
-            return JSON.stringify(a1) == JSON.stringify(a2);
-        }
 
         function checkWinGame() {
-            var currentArray = [];
+            var result = true;
+            /*var i = 1;
             for (var col = 1; col <= 3; col++) {
                 for (var row = 1; row <= 3; row++) {
                     var data = $(`#C${row}${col}`)[0].className.replace('img', '');
                     currentArray.push(parseInt(data));
+                    
+                    if($(`#C${row}${col}`)[0].className != 'img'+i)
+                    {
+                        result = false;
+                        break;
+                    }
+                    i++;
+                }
+            }*/
+
+            for (var i = 0; i < 9; i++) {
+                var row = i % 3 + 1;
+                var col = parseInt(i / 3 + 1);
+                if ($(`#C${row}${col}`)[0].className != 'img' + (i + 1)) {
+                    result = false;
+                    break;
                 }
             }
-            var answer = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-            if (arraysEqual(currentArray, answer)) {
+
+            if (result) {
                 $('#C33').removeClass('img9').addClass('win');
                 setTimeout(function () {
                     alert(`您共用了${step}步成功拼回拼圖!`)
                 }, 500)
+                array = [];
                 $('#start').prop('disabled', false);
             }
         }
@@ -238,7 +243,6 @@
             <button id="start" type="button" class="btn btn-primary">開始遊戲</button>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">查看原圖</button>
             <button id="restart" type="button" class="btn btn-primary">重新開始</button>
-            <!-- The Modal -->
             <div class="modal" id="myModal">
                 <div class="modal-dialog">
                     <div class="modal-content">
