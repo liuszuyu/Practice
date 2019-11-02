@@ -19,8 +19,7 @@
     </script>
     <script>
         function Show(msg) {
-            var content = msg;
-            $('#Label1').html(content);
+            $('#Label1').html(msg);
             //document.getElementById('Label1').innerHTML += msg + "<br />";
         }
 
@@ -41,7 +40,7 @@
             BmiObj.weight = $('#txbWeight').val();
             // BmiObj.height = document.getElementById('txbHeight').value;
             // BmiObj.weight = document.getElementById('txbWeight').value;
-            let bmi = BmiObj.GetBmi();
+            let bmi = Math.round(BmiObj.GetBmi()*10)/10;
             Show("BMI :" + bmi);
         }
 

@@ -132,7 +132,7 @@
         }
 
         function clickTile(ID) {
-            //var img = document.getElementById(ID).className;
+            
             var selectedTile = $(`#${ID}`).attr('class');
             var row = parseInt(ID[1]);
             var col = parseInt(ID[2]);
@@ -182,21 +182,6 @@
 
         function checkWinGame() {
             var result = true;
-            /*var i = 1;
-            for (var col = 1; col <= 3; col++) {
-                for (var row = 1; row <= 3; row++) {
-                    var data = $(`#C${row}${col}`)[0].className.replace('img', '');
-                    currentArray.push(parseInt(data));
-                    
-                    if($(`#C${row}${col}`)[0].className != 'img'+i)
-                    {
-                        result = false;
-                        break;
-                    }
-                    i++;
-                }
-            }*/
-
             for (var i = 0; i < 9; i++) {
                 var row = i % 3 + 1;
                 var col = parseInt(i / 3 + 1);
