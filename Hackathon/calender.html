@@ -2,7 +2,7 @@
 <html lang="zh-Hant-Tw">
 
 <head>
-  <title>Title</title>
+  <title>Calender</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,12 +11,177 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js""></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <style>
+    table td {
+      padding: 1 !important;
+      height: 90px;
+    }
 
+    table th {
+      padding: 0 !important;
+      width: 60px;
+    }
+
+    .notThisMonth {
+      color: #d3d3d3;
+    }
+  </style>
+  <script>
+    var Calender = [];
+    var d = new Date();
+    var count = 0;
+    var currentDate;
+    var currentMonth;
+    var currentYear;
+    var currentDay;
+    var firstDate;
+    var lastDate;
+    var displayDays; // Calculate the number of days this month
+
+    $(function () {
+      ProduceCalenderDate();
+      $('#previousMonth').click(function (e) {
+        count--;
+        $("tbody").remove();
+        $("table").html($('<tbody>'));
+        Calender = [];
+        ProduceCalenderDate();
+      });
+      $('#nextMonth').click(function (e) {
+        count++;
+        $("tbody").remove();
+        $("table").html($('<tbody>'));
+        Calender = [];
+        ProduceCalenderDate();
+      });
+    });
+
+
+    function DisplayCalender() {
+      $('#year').text(currentYear);
+      $('#month').text(Month(currentMonth));
+      var rows = Calender.length / 7;
+      for (let i = 0; i < rows; i++) {
+        $("tbody").append($('<tr>').addClass('week' + i));
+      }
+
+      for (let i = 0; i < Calender.length; i++) {
+        var whichWeek = parseInt(i / 7);
+        $("tbody").find(".week" + whichWeek).append($('<td id='+i+'>').text(Calender[i].date));
+
+        if(Calender[i].month != currentMonth+1)
+        {
+          $('#'+i).addClass('notThisMonth');
+        }
+
+      }
+    }
+
+    function Month(m) {
+      var month = new Array(12);
+      month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
+        'November', 'December'
+      ];
+      return month[m];
+    }
+
+    function ProduceCalenderDate() {
+      InitDay();
+      FillInLastMonthDate();
+      FillInCurrentMonthDate();
+      FillInNextMonthDate();
+      DisplayCalender();
+    }
+
+    function InitDay() {
+      currentDate = d.getDate();
+      currentMonth = d.getMonth() + count;
+      currentYear = d.getFullYear() + parseInt((count+currentMonth-1)/12);
+      currentDay = d.getDay();
+      firstDate = new Date(currentYear, currentMonth, 1);
+      lastDate = new Date(currentYear, currentMonth + 1, 0);
+      displayDays = ((lastDate - firstDate) / (1000 * 60 * 60 * 24)) + 1;
+    }
+
+
+    function FillInLastMonthDate() {
+
+      var lastDateOfLastMonth = new Date(currentYear, currentMonth, 0);
+      var firstDay = firstDate.getDay(); //1st Day of this month
+      var displayDate = lastDateOfLastMonth.getDate() - firstDay + 1;
+      var displayWeekday = lastDateOfLastMonth.getDay() - firstDay + 1;
+      for (let i = 0; i < firstDay; i++) {
+        var data = {
+          "month": lastDateOfLastMonth.getMonth() + 1,
+          "date": displayDate,
+          "weekday": displayWeekday
+        };
+        displayDate++;
+        displayWeekday++;
+        Calender.push(data);
+      }
+    }
+
+    function FillInCurrentMonthDate() {
+      var begin = firstDate.getDate();
+      var end = lastDate.getDate();
+      for (let i = begin; i <= end; i++) {
+        var data = {
+          "month": firstDate.getMonth() + 1,
+          "date": i,
+          "week": new Date(currentYear, currentMonth, i).getDay()
+        }
+        Calender.push(data);
+      }
+    }
+
+    function FillInNextMonthDate() {
+      var NextMonthFirstDate = new Date(currentYear, currentMonth + 1, 1);
+      var lastDay = lastDate.getDay(); // last Day of next month
+      for (let i = 0; i < 6 - lastDay; i++) {
+        var data = {
+          "month": NextMonthFirstDate.getMonth() + 1,
+          "date": NextMonthFirstDate.getDate() + i,
+          "week": NextMonthFirstDate.getDay() + i
+        };
+        Calender.push(data);
+      };
+    }
+  </script>
 </head>
 
 <body>
+  <div class="container mt-3">
+    <div class="row">
+      <div class="col-xl-12 table-info table-bordered p-3 text-center">
+        <a class="carousel-control-prev">
+          <span class="carousel-control-prev-icon" id="previousMonth"></span>
+        </a>
+        <span class="h2" id="year"> </span>
+        <span class="h2" id="month"> </span>
+        <a class="carousel-control-next" id="nextMonth">
+          <span class="carousel-control-next-icon"></span>
+        </a>
+      </div>
 
+      <table class="table table-bordered ">
+        <thead>
+          <tr class=" table-info text-center">
+            <th scope="col">Sun</th>
+            <th scope="col">Mon</th>
+            <th scope="col">Tue</th>
+            <th scope="col">Wed</th>
+            <th scope="col">Thu</th>
+            <th scope="col">Fri</th>
+            <th scope="col">Sat</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
 </body>
 
