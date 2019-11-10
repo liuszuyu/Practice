@@ -74,16 +74,14 @@
         {
           $('#'+i).addClass('notThisMonth');
         }
-
       }
     }
 
     function Month(m) {
       var month = new Array(12);
       month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
-        'November', 'December'
-      ];
-      return month[m];
+        'November', 'December'];
+      return month[parseInt(m%12)];
     }
 
     function ProduceCalenderDate() {
@@ -95,9 +93,11 @@
     }
 
     function InitDay() {
-      currentDate = d.getDate();
-      currentMonth = d.getMonth() + count;
-      currentYear = d.getFullYear() + parseInt((count+currentMonth-1)/12);
+      d = new Date();
+      //currentDate = d.getDate(); 
+      d.setMonth(d.getMonth()+count);
+      currentMonth = d.getMonth();
+      currentYear = d.getFullYear();
       currentDay = d.getDay();
       firstDate = new Date(currentYear, currentMonth, 1);
       lastDate = new Date(currentYear, currentMonth + 1, 0);
