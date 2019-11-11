@@ -29,7 +29,6 @@
   </style>
   <script>
     var Calender = [];
-    var d = new Date();
     var count = 0;
     var currentDate;
     var currentMonth;
@@ -55,16 +54,26 @@
         Calender = [];
         ProduceCalenderDate();
       });
-      // $('td').click(function (e) { 
-      //   $('#eventModal').modal();
-      //   $(this).attr('id');
-      // });
+      clickDate();
     });
 
-    function setDate()
-    {
-      
+    function clickDate() {
+      $('td').click(function (e) {
+        $('#eventModal').modal();
+        $('#fieldDate').val(currentYear + '-' + checkFormat(Calender[this.id].month) + '-' + checkFormat(Calender[
+          this.id].date));
+      });
     }
+
+    function checkFormat(value) {
+      if (value < 10) {
+        return '0' + value;
+      } else {
+        return value;
+      }
+    }
+
+
 
     function DisplayCalender() {
       $('#year').text(currentYear);
@@ -76,11 +85,12 @@
 
       for (let i = 0; i < Calender.length; i++) {
         var whichWeek = parseInt(i / 7);
-        $("tbody").find(".week" + whichWeek).append($('<td id='+i+' data-toggle="modal" data-target="#eventModal" onclick = "setDate()">').text(Calender[i].date));
+        $("tbody").find(".week" + whichWeek)
+          .append($('<td id=' + i + '>')
+            .text(Calender[i].date));
 
-        if(Calender[i].month != currentMonth+1)
-        {
-          $('#'+i).addClass('notThisMonth');
+        if (Calender[i].month != currentMonth + 1) {
+          $('#' + i).addClass('notThisMonth');
         }
       }
     }
@@ -88,8 +98,9 @@
     function Month(m) {
       var month = new Array(12);
       month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
-        'November', 'December'];
-      return month[parseInt(m%12)];
+        'November', 'December'
+      ];
+      return month[parseInt(m % 12)];
     }
 
     function ProduceCalenderDate() {
@@ -98,12 +109,13 @@
       FillInCurrentMonthDate();
       FillInNextMonthDate();
       DisplayCalender();
+      clickDate();
     }
 
     function InitDay() {
       d = new Date();
       //currentDate = d.getDate(); 
-      d.setMonth(d.getMonth()+count);
+      d.setMonth(d.getMonth() + count);
       currentMonth = d.getMonth();
       currentYear = d.getFullYear();
       currentDay = d.getDay();
@@ -188,7 +200,8 @@
         <tbody>
         </tbody>
       </table>
-      <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+      <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -199,20 +212,18 @@
             </div>
             <div class="modal-body">
               <label for=“fieldDate”>Date</label>
-              <input class="form-control" type="date" id="fieldContent" name="fieldContent">
+              <input class="form-control" type="date" id="fieldDate" name="fieldDate">
               <label for=“fieldContent”>Event</label>
               <input class="form-control" type="text" id="fieldContent" name="fieldContent">
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               <button type="button" class="btn btn-info">Save changes</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
 </body>
-
 </html>
