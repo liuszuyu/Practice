@@ -55,12 +55,16 @@
         Calender = [];
         ProduceCalenderDate();
       });
-      $('td').click(function (e) { 
-        $('#eventModal').modal();
-        $(this).attr('id');
-      });
+      // $('td').click(function (e) { 
+      //   $('#eventModal').modal();
+      //   $(this).attr('id');
+      // });
     });
 
+    function setDate()
+    {
+      
+    }
 
     function DisplayCalender() {
       $('#year').text(currentYear);
@@ -72,7 +76,7 @@
 
       for (let i = 0; i < Calender.length; i++) {
         var whichWeek = parseInt(i / 7);
-        $("tbody").find(".week" + whichWeek).append($('<td id='+i+'>').text(Calender[i].date));
+        $("tbody").find(".week" + whichWeek).append($('<td id='+i+' data-toggle="modal" data-target="#eventModal" onclick = "setDate()">').text(Calender[i].date));
 
         if(Calender[i].month != currentMonth+1)
         {
@@ -188,13 +192,16 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="eventModalLabel">新增事項</h5>
+              <h5 class="modal-title" id="eventModalLabel">Add event</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              ...
+              <label for=“fieldDate”>Date</label>
+              <input class="form-control" type="date" id="fieldContent" name="fieldContent">
+              <label for=“fieldContent”>Event</label>
+              <input class="form-control" type="text" id="fieldContent" name="fieldContent">
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
