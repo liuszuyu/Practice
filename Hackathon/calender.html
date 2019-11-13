@@ -29,7 +29,6 @@
   </style>
   <script>
     var Calender = [];
-    var data = [];
     var count = 0;
     var currentDate;
     var currentMonth;
@@ -40,6 +39,10 @@
     var displayDays; // Calculate the number of days this month
 
     $(function () {
+      Init();
+    });
+
+    function Init() {
       ProduceCalenderDate();
       $('#previousMonth').click(function (e) {
         count--;
@@ -51,35 +54,59 @@
       });
       $('#saveData').click(function (e) {
         SaveData();
-        //ShowData();
       });
-    });
+      $('#deleteData').click(function (e) {
+        DeleteData();
+      });
+    }
 
-function SaveData(){
-  var date = $('#fieldDate').val();
-  var content = $('#fieldContent').val();
-  data.push({date:date, content: content});
-  localStorage.data = JSON.stringify(data);
-}
+    function DeleteData() {
+      $('#eventModal').modal('hide');
+      data = LoadData();
+     if(data!=null){
+      var n = findIndexByKeyValue(data, 'date', $('#fieldDate').val());
+      data.splice(n, 1);
 
-function LoadData(){
-  var data = JSON.parse(localStorage.data);
-}
-    // function ShowData() {
-    //   let id = SelectDate();
-    //   var content = $('#fieldContent').val();
-    //   var originalContent = $('#' + id).text();
-    //   $('#' + id).text(originalContent+content);
-    // }
+      localStorage.data = JSON.stringify(data);
+      ChangeMonth();}
+    }
 
-    // function SelectDate() {
-    //   var dataDate = $('#fieldDate').val().slice(-2);
-    //   if (dataDate < 10) {
-    //     return dataDate.slice(-1);
-    //   } else {
-    //     return dataDate;
-    //   }
-    // }
+    function findIndexByKeyValue(obj, key, value) {
+      for (var i = 0; i < obj.length; i++) {
+        if (obj[i][key] == value) {
+          return i;
+        }
+      }
+      return null;
+    }
+
+    function SaveData() {
+      var date = $('#fieldDate').val();
+      var content = $('#fieldContent').val();
+      data = LoadData();
+      if(data == null){
+        data = [];
+      }
+      if (content != "") {
+        data.push({
+          date: date,
+          content: content
+        });
+        localStorage.data = JSON.stringify(data);
+        $('#eventModal').modal('hide');
+        ChangeMonth();
+      }
+
+
+    }
+
+    function LoadData() {
+      if(localStorage.data!= null){
+        return JSON.parse(localStorage.data);
+      }
+      else return null;
+      
+    }
 
     function ChangeMonth() {
       $("tbody").remove();
@@ -94,6 +121,13 @@ function LoadData(){
         //設定日期為點選的那一天
         $('#fieldDate').val(currentYear + '-' + checkFormat(Calender[this.id].month) + '-' + checkFormat(Calender[
           this.id].date));
+        $('#fieldContent').val('');
+        data = LoadData();
+        if (data!= null){data.forEach(x => {
+          if (x.date === $('#fieldDate').val()) {
+            $('#fieldContent').val(x.content);
+          }
+        })}
       });
     }
 
@@ -106,6 +140,7 @@ function LoadData(){
     }
 
     function DisplayCalender() {
+       data = LoadData();
       $('#year').text(currentYear);
       $('#month').text(Month(currentMonth));
       var rows = Calender.length / 7;
@@ -118,6 +153,15 @@ function LoadData(){
         $("tbody").find(".week" + whichWeek)
           .append($('<td id=' + i + '>')
             .text(Calender[i].date));
+        if (data != null) {
+          data.forEach(x => {
+            if (x.date === (currentYear + '-' + checkFormat(Calender[i].month) + '-' + checkFormat(Calender[i]
+                .date))) {
+              $('#' + i).text($('#' + i).text() + '\n' + x.content);
+              $('#' + i).html($('#' + i).html().replace(/\n/g, '<br/>'));
+            }
+          })
+        };
 
         if (Calender[i].month != currentMonth + 1) {
           $('#' + i).addClass('notThisMonth');
@@ -249,6 +293,7 @@ function LoadData(){
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-info" id="saveData">Save changes</button>
+              <button type="button" class="btn btn-danger" id="deleteData">Delete</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
           </div>
