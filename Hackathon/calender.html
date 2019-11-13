@@ -29,6 +29,7 @@
   </style>
   <script>
     var Calender = [];
+    var data = [];
     var count = 0;
     var currentDate;
     var currentMonth;
@@ -42,24 +43,55 @@
       ProduceCalenderDate();
       $('#previousMonth').click(function (e) {
         count--;
-        $("tbody").remove();
-        $("table").html($('<tbody>'));
-        Calender = [];
-        ProduceCalenderDate();
+        ChangeMonth();
       });
       $('#nextMonth').click(function (e) {
         count++;
-        $("tbody").remove();
-        $("table").html($('<tbody>'));
-        Calender = [];
-        ProduceCalenderDate();
+        ChangeMonth();
       });
-      clickDate();
+      $('#saveData').click(function (e) {
+        SaveData();
+        //ShowData();
+      });
     });
 
-    function clickDate() {
+function SaveData(){
+  var date = $('#fieldDate').val();
+  var content = $('#fieldContent').val();
+  data.push({date:date, content: content});
+  localStorage.data = JSON.stringify(data);
+}
+
+function LoadData(){
+  var data = JSON.parse(localStorage.data);
+}
+    // function ShowData() {
+    //   let id = SelectDate();
+    //   var content = $('#fieldContent').val();
+    //   var originalContent = $('#' + id).text();
+    //   $('#' + id).text(originalContent+content);
+    // }
+
+    // function SelectDate() {
+    //   var dataDate = $('#fieldDate').val().slice(-2);
+    //   if (dataDate < 10) {
+    //     return dataDate.slice(-1);
+    //   } else {
+    //     return dataDate;
+    //   }
+    // }
+
+    function ChangeMonth() {
+      $("tbody").remove();
+      $("table").append($('<tbody>'));
+      Calender = [];
+      ProduceCalenderDate();
+    }
+
+    function ClickDate() {
       $('td').click(function (e) {
         $('#eventModal').modal();
+        //設定日期為點選的那一天
         $('#fieldDate').val(currentYear + '-' + checkFormat(Calender[this.id].month) + '-' + checkFormat(Calender[
           this.id].date));
       });
@@ -72,8 +104,6 @@
         return value;
       }
     }
-
-
 
     function DisplayCalender() {
       $('#year').text(currentYear);
@@ -95,7 +125,8 @@
       }
     }
 
-    function Month(m) {
+
+    function Month(m) { //將month轉換成顯示在標題的月份
       var month = new Array(12);
       month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
         'November', 'December'
@@ -109,7 +140,7 @@
       FillInCurrentMonthDate();
       FillInNextMonthDate();
       DisplayCalender();
-      clickDate();
+      ClickDate();
     }
 
     function InitDay() {
@@ -217,7 +248,7 @@
               <input class="form-control" type="text" id="fieldContent" name="fieldContent">
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-info">Save changes</button>
+              <button type="button" class="btn btn-info" id="saveData">Save changes</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
           </div>
@@ -226,4 +257,5 @@
     </div>
   </div>
 </body>
+
 </html>
