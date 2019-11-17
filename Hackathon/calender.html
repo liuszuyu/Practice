@@ -17,7 +17,7 @@
       padding: 1 !important;
       height: 90px;
       max-width: 60px;
-      overflow:hidden;
+      overflow: hidden;
     }
 
     table th {
@@ -28,224 +28,25 @@
     .notThisMonth {
       color: #d3d3d3;
     }
+
+    td:hover {
+      background-color: lightcyan;
+      cursor: pointer;
+    }
+
+    .today {
+      background-color:paleturquoise;
+    }
+
+    .sunday {
+            color: red;
+        }
+
+    a:hover{
+      cursor: pointer;
+    }
   </style>
-  <script>
-    var Calender = [];
-    var count = 0;
-    var currentDate;
-    var currentMonth;
-    var currentYear;
-    var currentDay;
-    var firstDate;
-    var lastDate;
-    var displayDays; // Calculate the number of days this month
-
-    $(function () {
-      Init();
-    });
-
-    function Init() {
-      ProduceCalenderDate();
-      $('#previousMonth').click(function (e) {
-        count--;
-        ChangeMonth();
-      });
-      $('#nextMonth').click(function (e) {
-        count++;
-        ChangeMonth();
-      });
-      $('#saveData').click(function (e) {
-        SaveData();
-      });
-      $('#deleteData').click(function (e) {
-        DeleteData();
-      });
-    }
-
-    function DeleteData() {
-      $('#eventModal').modal('hide');
-      data = LoadData();
-     if(data!=null){
-      var n = findIndexByKeyValue(data, 'date', $('#fieldDate').val());
-      data.splice(n, 1);
-
-      localStorage.data = JSON.stringify(data);
-      ChangeMonth();}
-    }
-
-    function findIndexByKeyValue(obj, key, value) {
-      for (var i = 0; i < obj.length; i++) {
-        if (obj[i][key] == value) {
-          return i;
-        }
-      }
-      return null;
-    }
-
-    function SaveData() {
-      var date = $('#fieldDate').val();
-      var content = $('#fieldContent').val();
-      data = LoadData();
-      if(data == null){
-        data = [];
-      }
-      if (content != "") {
-        data.push({
-          date: date,
-          content: content
-        });
-        localStorage.data = JSON.stringify(data);
-        $('#eventModal').modal('hide');
-        ChangeMonth();
-      }
-
-
-    }
-
-    function LoadData() {
-      if(localStorage.data!= null){
-        return JSON.parse(localStorage.data);
-      }
-      else return null;
-      
-    }
-
-    function ChangeMonth() {
-      $("tbody").remove();
-      $("table").append($('<tbody>'));
-      Calender = [];
-      ProduceCalenderDate();
-    }
-
-    function ClickDate() {
-      $('td').click(function (e) {
-        $('#eventModal').modal();
-        //設定日期為點選的那一天
-        $('#fieldDate').val(currentYear + '-' + checkFormat(Calender[this.id].month) + '-' + checkFormat(Calender[
-          this.id].date));
-        $('#fieldContent').val('');
-        data = LoadData();
-        if (data!= null){data.forEach(x => {
-          if (x.date === $('#fieldDate').val()) {
-            $('#fieldContent').val(x.content);
-          }
-        })}
-      });
-    }
-
-    function checkFormat(value) {
-      if (value < 10) {
-        return '0' + value;
-      } else {
-        return value;
-      }
-    }
-
-    function DisplayCalender() {
-       data = LoadData();
-      $('#year').text(currentYear);
-      $('#month').text(Month(currentMonth));
-      var rows = Calender.length / 7;
-      for (let i = 0; i < rows; i++) {
-        $("tbody").append($('<tr>').addClass('week' + i));
-      }
-
-      for (let i = 0; i < Calender.length; i++) {
-        var whichWeek = parseInt(i / 7);
-        $("tbody").find(".week" + whichWeek)
-          .append($('<td id=' + i + '>')
-            .text(Calender[i].date));
-        if (data != null) {
-          data.forEach(x => {
-            if (x.date === (currentYear + '-' + checkFormat(Calender[i].month) + '-' + checkFormat(Calender[i]
-                .date))) {
-              $('#' + i).text($('#' + i).text() + '\n' + x.content);
-              $('#' + i).html($('#' + i).html().replace(/\n/g, '<br/>'));
-            }
-          })
-        };
-
-        if (Calender[i].month != currentMonth + 1) {
-          $('#' + i).addClass('notThisMonth');
-        }
-      }
-    }
-
-
-    function Month(m) { //將month轉換成顯示在標題的月份
-      var month = new Array(12);
-      month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
-        'November', 'December'
-      ];
-      return month[parseInt(m % 12)];
-    }
-
-    function ProduceCalenderDate() {
-      InitDay();
-      FillInLastMonthDate();
-      FillInCurrentMonthDate();
-      FillInNextMonthDate();
-      DisplayCalender();
-      ClickDate();
-    }
-
-    function InitDay() {
-      d = new Date();
-      //currentDate = d.getDate(); 
-      d.setMonth(d.getMonth() + count);
-      currentMonth = d.getMonth();
-      currentYear = d.getFullYear();
-      currentDay = d.getDay();
-      firstDate = new Date(currentYear, currentMonth, 1);
-      lastDate = new Date(currentYear, currentMonth + 1, 0);
-      displayDays = ((lastDate - firstDate) / (1000 * 60 * 60 * 24)) + 1;
-    }
-
-
-    function FillInLastMonthDate() {
-
-      var lastDateOfLastMonth = new Date(currentYear, currentMonth, 0);
-      var firstDay = firstDate.getDay(); //1st Day of this month
-      var displayDate = lastDateOfLastMonth.getDate() - firstDay + 1;
-      var displayWeekday = lastDateOfLastMonth.getDay() - firstDay + 1;
-      for (let i = 0; i < firstDay; i++) {
-        var data = {
-          "month": lastDateOfLastMonth.getMonth() + 1,
-          "date": displayDate,
-          "weekday": displayWeekday
-        };
-        displayDate++;
-        displayWeekday++;
-        Calender.push(data);
-      }
-    }
-
-    function FillInCurrentMonthDate() {
-      var begin = firstDate.getDate();
-      var end = lastDate.getDate();
-      for (let i = begin; i <= end; i++) {
-        var data = {
-          "month": firstDate.getMonth() + 1,
-          "date": i,
-          "week": new Date(currentYear, currentMonth, i).getDay()
-        }
-        Calender.push(data);
-      }
-    }
-
-    function FillInNextMonthDate() {
-      var NextMonthFirstDate = new Date(currentYear, currentMonth + 1, 1);
-      var lastDay = lastDate.getDay(); // last Day of next month
-      for (let i = 0; i < 6 - lastDay; i++) {
-        var data = {
-          "month": NextMonthFirstDate.getMonth() + 1,
-          "date": NextMonthFirstDate.getDate() + i,
-          "week": NextMonthFirstDate.getDay() + i
-        };
-        Calender.push(data);
-      };
-    }
-  </script>
+ 
 </head>
 
 <body>
@@ -265,7 +66,7 @@
       <table class="table table-bordered ">
         <thead>
           <tr class=" table-info text-center">
-            <th scope="col">Sun</th>
+            <th class = "sunday" scope="col">Sun</th>
             <th scope="col">Mon</th>
             <th scope="col">Tue</th>
             <th scope="col">Wed</th>
@@ -304,5 +105,229 @@
     </div>
   </div>
 </body>
+<script>
+  var Calender = [];
+  var count = 0;
+  var currentDate;
+  var currentMonth;
+  var currentYear;
+  var currentDay;
+  var firstDate;
+  var lastDate;
+  var displayDays; // Calculate the number of days this month
 
+  $(function () {
+    Init();
+  });
+
+  function Init() {
+    ProduceCalenderDate();
+    $('#previousMonth').click(function (e) {
+      count--;
+      RefreshCalender();
+    });
+    $('#nextMonth').click(function (e) {
+      count++;
+      RefreshCalender();
+    });
+    $('#saveData').click(function (e) {
+      SaveData();
+    });
+    $('#deleteData').click(function (e) {
+      DeleteData();
+    });
+  }
+
+  function DeleteData() {
+    $('#eventModal').modal('hide');
+    data = LoadData();
+    if (data != null) {
+      var n = findIndexByKeyValue(data, 'date', $('#fieldDate').val());
+      data.splice(n, 1);
+
+      localStorage.data = JSON.stringify(data);
+      RefreshCalender();
+    }
+  }
+
+  function findIndexByKeyValue(obj, key, value) {
+    for (var i = 0; i < obj.length; i++) {
+      if (obj[i][key] == value) {
+        return i;
+      }
+    }
+    return null;
+  }
+
+  function SaveData() {
+    var date = $('#fieldDate').val();
+    var content = $('#fieldContent').val();
+    data = LoadData();
+    if (data == null) {
+      data = [];
+    }
+    if (content != "") {
+      data.push({
+        date: date,
+        content: content
+      });
+      localStorage.data = JSON.stringify(data);
+      $('#eventModal').modal('hide');
+      RefreshCalender();
+    }
+
+
+  }
+
+  function LoadData() {
+    if (localStorage.data != null) {
+      return JSON.parse(localStorage.data);
+    } else return null;
+
+  }
+
+  function RefreshCalender() {
+    $("tbody").remove();
+    $("table").append($('<tbody>'));
+    Calender = [];
+    ProduceCalenderDate();
+  }
+
+  function ClickDate() {
+    $('td').click(function (e) {
+      $('#eventModal').modal();
+      //設定日期為點選的那一天
+      $('#fieldDate').val(currentYear + '-' + checkFormat(Calender[this.id].month) + '-' + checkFormat(Calender[
+        this.id].date));
+      $('#fieldContent').val('');
+      data = LoadData();
+      if (data != null) {
+        data.forEach(x => {
+          if (x.date === $('#fieldDate').val()) {
+            $('#fieldContent').val(x.content);
+          }
+        })
+      }
+    });
+  }
+
+  function checkFormat(value) {
+    if (value < 10) {
+      return '0' + value;
+    } else {
+      return value;
+    }
+  }
+
+  function DisplayCalender() {
+    var today = new Date();
+    data = LoadData();
+    $('#year').text(currentYear);
+    $('#month').text(Month(currentMonth));
+    var rows = Calender.length / 7;
+    for (let i = 0; i < rows; i++) {
+      $("tbody").append($('<tr>').addClass('week' + i));
+    }
+    for (let i = 0; i < Calender.length; i++) {
+      var whichWeek = parseInt(i / 7);
+      $("tbody").find(".week" + whichWeek)
+        .append($('<td id=' + i + '>')
+          .text(Calender[i].date));
+      if (Calender[i].date=== today.getDate()&& count == 0){
+        $('#' + i).addClass('today');
+      }
+
+        if (data != null) {
+          data.forEach(x => {
+            if (x.date === (currentYear + '-' + checkFormat(Calender[i].month) + '-' + checkFormat(Calender[i]
+                .date))) {
+              $('#' + i).text($('#' + i).text() + '\n' + x.content);
+              $('#' + i).html($('#' + i).html().replace(/\n/g, '<br/>')); //換行
+            }
+          })
+        };
+
+
+
+      if (Calender[i].month != currentMonth + 1) {
+        $('#' + i).addClass('notThisMonth');
+      }
+    }
+  }
+
+
+  function Month(m) { //將month轉換成顯示在標題的月份
+    var month = new Array(12);
+    month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
+      'November', 'December'
+    ];
+    return month[parseInt(m % 12)];
+  }
+
+  function ProduceCalenderDate() {
+    InitDay();
+    FillInLastMonthDate();
+    FillInCurrentMonthDate();
+    FillInNextMonthDate();
+    DisplayCalender();
+    ClickDate();
+  }
+
+  function InitDay() {
+    d = new Date();
+    //currentDate = d.getDate(); 
+    d.setMonth(d.getMonth() + count);
+    currentMonth = d.getMonth();
+    currentYear = d.getFullYear();
+    currentDay = d.getDay();
+    firstDate = new Date(currentYear, currentMonth, 1);
+    lastDate = new Date(currentYear, currentMonth + 1, 0);
+    displayDays = ((lastDate - firstDate) / (1000 * 60 * 60 * 24)) + 1;
+  }
+
+
+  function FillInLastMonthDate() {
+
+    var lastDateOfLastMonth = new Date(currentYear, currentMonth, 0);
+    var firstDay = firstDate.getDay(); //1st Day of this month
+    var displayDate = lastDateOfLastMonth.getDate() - firstDay + 1;
+    var displayWeekday = lastDateOfLastMonth.getDay() - firstDay + 1;
+    for (let i = 0; i < firstDay; i++) {
+      var data = {
+        "month": lastDateOfLastMonth.getMonth() + 1,
+        "date": displayDate,
+        "weekday": displayWeekday
+      };
+      displayDate++;
+      displayWeekday++;
+      Calender.push(data);
+    }
+  }
+
+  function FillInCurrentMonthDate() {
+    var begin = firstDate.getDate();
+    var end = lastDate.getDate();
+    for (let i = begin; i <= end; i++) {
+      var data = {
+        "month": firstDate.getMonth() + 1,
+        "date": i,
+        "week": new Date(currentYear, currentMonth, i).getDay()
+      }
+      Calender.push(data);
+    }
+  }
+
+  function FillInNextMonthDate() {
+    var NextMonthFirstDate = new Date(currentYear, currentMonth + 1, 1);
+    var lastDay = lastDate.getDay(); // last Day of next month
+    for (let i = 0; i < 6 - lastDay; i++) {
+      var data = {
+        "month": NextMonthFirstDate.getMonth() + 1,
+        "date": NextMonthFirstDate.getDate() + i,
+        "week": NextMonthFirstDate.getDay() + i
+      };
+      Calender.push(data);
+    };
+  }
+</script>
 </html>
