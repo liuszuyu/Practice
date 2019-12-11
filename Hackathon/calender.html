@@ -233,7 +233,7 @@
       $("tbody").find(".week" + whichWeek)
         .append($('<td id=' + i + '>')
           .text(Calender[i].date));
-      if (Calender[i].date=== today.getDate()&& count == 0){
+      if (Calender[i].date === today.getDate() && Calender[i].month === (today.getMonth()+1) && count == 0){
         $('#' + i).addClass('today');
       }
 
