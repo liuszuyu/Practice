@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-Hant-Tw">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+    <script>
+        var json = {
+            title: "標題"
+        };
+
+        function Binding() {
+            new Vue({
+                el: '#block1',
+                data: json
+            });
+        }
+
+        function setupClock() {
+            json.title = Date();
+            setTimeout(setupClock, 1000);
+        }
+
+        function ShowModel() {
+            alert(json.title);
+            json.title = 'test';
+        }
+
+        $(function () {
+            Binding();
+            //  setupClock();
+            $(button).click(function (e) {
+                ShowModel();
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row" id="block1">
+            <div class="col-6">
+                <label>{{title}}</label>
+            </div>
+            <div class="col-6">
+                <input type="text" v-model="title" />
+            </div>
+            <button id="button">顯示Model</button>
+        </div>
+
+</body>
+
+</html>

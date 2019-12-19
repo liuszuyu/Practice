@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-Hant-Tw">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+    <script>
+        var vm;
+        var count = 0;
+        var json = {
+            items: [{
+                    ID: 3,
+                    title: "總裁",
+                    name: "Eric",
+                    PictureURL: "https://i.imgur.com/uxvy97n.png",
+                    Phone: "0912345678",
+                    Address: "新竹市大同區二三五路四號六樓",
+                    Memo: "澳洲來的人",
+                    isValid: false
+                },
+                {
+                    ID: 4,
+                    title: "瑪農",
+                    name: "David",
+                    PictureURL: "https://i.imgur.com/qsQcoGh.png",
+                    Phone: "0987654321",
+                    Address: "台北市信義區忠孝東路231號3樓",
+                    Memo: "充滿活力的廉價勞工",
+                    isValid: true
+                },
+                {
+                    ID: 5,
+                    title: "Boss",
+                    name: "Amy",
+                    PictureURL: "https://i.imgur.com/dfww1JX.png",
+                    Phone: "0912121121",
+                    Address: "高雄市仁義區六六路3號23樓",
+                    Memo: "小資女",
+                    isValid: true
+                }
+            ]
+           
+        };
+
+        function Binding() {
+            vm = new Vue({
+                el: '#block1',
+                data: {item: json.items[count]},
+                methods:{
+                    SwitchValid: function(event){   
+                       this.$data.item.isValid = !this.$data.item.isValid;
+                    },
+                }
+            });
+        }
+
+        // function GetCurrentIndex() {
+        //     return vm.$data.item.ID;
+        // }
+
+        function NextData() {
+            if (count < json.items.length - 1) {
+                count++;
+            } else {
+                alert("沒有下一筆資料了!")
+            }
+            ChangeData();
+
+            // var CurrentIndex = GetCurrentIndex();
+            // var rets = $.grep(json.items, function (item, index) {
+            //     return item.ID > CurrentIndex;
+            // }) //把符合item.ID > CurrentIndex這個條件的回傳到rets變成一個新的陣列
+            // if(rets.length>0){
+            //     vm.$data.item = rets[0];
+        }
+
+        function PrevData() {
+            if (count > 0) {
+                count--;
+            } else {
+                alert("沒有上一筆資料了!")
+            }
+            ChangeData();
+
+            // var CurrentIndex = GetCurrentIndex();
+            // var rets = $.grep(json.items, function (item, index) {
+            //     return item.ID < CurrentIndex;
+            // })
+            // if(rets.length<0){
+            //     vm.$data.item=rets[rets.length-1];
+            // }
+        }
+
+        function ChangeData() {
+            vm.$data.item = json.items[count];
+        }
+
+        $(function () {
+            Binding();
+            $('#Next').click(function (e) {
+                NextData();
+            });
+            $('#Prev').click(function (e) {
+                PrevData();
+            });
+        });
+    </script>
+</head>
+
+<body>
+        <div class="container">
+            <div class="row" id="block1">
+                <div class="col-md-6">
+                    <div class="card ">
+                        
+                        <div class="card-header bg-primary text-white">資料編號:{{item.ID}}
+                            <span class="badge badge-warning" style="float: right" v-if="item.isValid==false">已刪除</span>
+                        </div>
+                        <div class="text-center">
+                            <img style="width:200px" v-bind:src="item.PictureURL" />
+                        </div>
+                        <div class="card-body">
+                            <label>職稱:</label>
+                            <input class="form-control" type="text" v-model="item.title">
+                            <label>姓名:</label>
+                            <input class="form-control" type="text" v-model="item.name" />
+                            <label>Phone:</label>
+                            <input class="form-control" type="text" v-model="item.Phone" />
+                            <label>Address:</label>
+                            <input class="form-control" type="text" v-model="item.Address" />
+                            <label>Memo:</label>
+                            <input class="form-control" type="text" v-model="item.Memo" />
+                        </div>
+                        <div class="card-footer">
+                            <button id="Prev" class="btn btn-primary">上一筆</button>
+                            <button class="btn btn-danger" v-if="item.isValid==true" v-on:click="SwitchValid">刪除</button>
+                            <button class="btn btn-secondary" v-else v-on:click="SwitchValid">救回</button>
+                            <button id="Next" class="btn btn-primary">下一筆</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>

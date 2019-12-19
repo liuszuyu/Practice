@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-Hant-Tw">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        var json = {
+            items: [{
+                    ID: 3,
+                    title: "總裁",
+                    name: "Eric",
+                    PictureURL: "https://i.imgur.com/uxvy97n.png",
+                    Phone: "0912345678",
+                    Address: "新竹市大同區二三五路四號六樓",
+                    Memo: "澳洲來的人",
+                    isValid: true
+                },
+                {
+                    ID: 4,
+                    title: "瑪農",
+                    name: "David",
+                    PictureURL: "https://i.imgur.com/qsQcoGh.png",
+                    Phone: "0987654321",
+                    Address: "台北市信義區忠孝東路231號3樓",
+                    Memo: "充滿活力的廉價勞工",
+                    isValid: true
+                },
+                {
+                    ID: 5,
+                    title: "Boss",
+                    name: "Amy",
+                    PictureURL: "https://i.imgur.com/dfww1JX.png",
+                    Phone: "0912121121",
+                    Address: "高雄市仁義區六六路3號23樓",
+                    Memo: "小資女",
+                    isValid: true
+                },
+                {
+                    ID: 6,
+                    title: "總裁",
+                    name: "Eric",
+                    PictureURL: "https://i.imgur.com/uxvy97n.png",
+                    Phone: "0912345678",
+                    Address: "新竹市大同區二三五路四號六樓",
+                    Memo: "澳洲來的人",
+                    isValid: true
+                },
+                {
+                    ID: 7,
+                    title: "瑪農",
+                    name: "David",
+                    PictureURL: "https://i.imgur.com/qsQcoGh.png",
+                    Phone: "0987654321",
+                    Address: "台北市信義區忠孝東路231號3樓",
+                    Memo: "充滿活力的廉價勞工",
+                    isValid: true
+                },
+                {
+                    ID: 8,
+                    title: "Boss",
+                    name: "Amy",
+                    PictureURL: "https://i.imgur.com/dfww1JX.png",
+                    Phone: "0912121121",
+                    Address: "高雄市仁義區六六路3號23樓",
+                    Memo: "小資女",
+                    isValid: true
+                }
+            ]
+        };
+
+        function Binding() {
+            vm = new Vue({
+                el: '#block1',
+                data: json
+            });
+        }
+
+        $(function () {
+            Binding();
+            $("#myTable").DataTable({
+                "info": false,
+                "bLengthChange": false,
+                "pageLength": 5
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div id="block1" class="row" style="margin:10px">
+        <div class="col-11">
+            <table id="myTable" class="cell-border compact stripe">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>職稱</th>
+                        <th>姓名</th>
+                        <th>電話</th>
+                        <th>地址</th>
+                        <th>備註</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in items">
+                        <td>{{item.ID}}</td>
+                        <td>{{item.title}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.Phone}}</td>
+                        <td>{{item.Address}}</td>
+                        <td>{{item.Memo}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </form>
+</body>
+
+</html>

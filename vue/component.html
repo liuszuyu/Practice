@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-Hant-Tw">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+    <script>
+        function Binding() {
+            new Vue({
+                el: '#block1'
+            })
+        }
+
+        function DefineComponent() {
+            Vue.component('my-component', {
+                props:['datavalue','name'],
+                template: '#my-template'
+            });
+        }
+        $(function () {
+            DefineComponent();
+            Binding();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container" id="block1">
+        <div class="row">
+            <div >
+                <my-component datavalue="Bob" name="姓名"></my-component>
+                <my-component datavalue="Amy"name="別名"></my-component>
+                <my-component datavalue="Eric"name="小名"></my-component>
+            </div>
+        </div>
+    </div>
+
+    <template id="my-template"><div><label>{{name}}</label><input type="text" class="form-control" v-model="datavalue"/></div></template>
+
+</body>
+
+</html>
