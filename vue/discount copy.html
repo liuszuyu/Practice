@@ -16,36 +16,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
     <script>
         function Binding() {
-            new Vue({
-                el: '#block1'
-            });
-        }
+            Vue.directive('background', {
+                    bind: function (el, binding) {
+                        el.style.backgroundColor = binding.value;
+                    },
+                    update: function (el, binding) {
+                        el.style.backgroundColor = binding.value;
+                    }
+                }),
 
-        function DefineComponent() {
-            Vue.component('my-component', {
-                template: '<div><label>欄位名稱</label><input class="form-control" type="text"  /></div>',
-            });
+                new Vue({
+                    el: '#block1',
+                    data: {color:'#CCFFCC'}
+                })
+            ;};
 
-        }
-        $(function () {
-         
-            DefineComponent();
-            Binding();
-        });
+            $(function () {
+                Binding();
+            });
     </script>
 </head>
-
 <body>
-
     <div id="block1" class="row" style="margin: 10px">
         <div class="col-6">
-            <h3>Component Test</h3><br />
-            <my-component></my-component>
+            <label>顏色</label>
             <br />
-            <my-component></my-component>
-            <br />
-            <my-component></my-component>
-            <br />
+            <input v-model="color"><br />
+            <label>背景</label><br />
+            <input v-background="color" value="測試顏色"><br />
         </div>
     </div>
 </body>

@@ -17,20 +17,20 @@
     <script>
         function Binding() {
             new Vue({
-                    el: '#block1',
-                    data: {
-                       OriginalPrice: 0
-                    },
-                    computed: {
-                        DiscountPrice: {
-                            get: function () {
-                                return this.OriginalPrice * 0.85;
-                            },
-                            set: function (val) {
-                                this.OriginalPrice = val /0.85;
-                            }
+                el: '#block1',
+                data: {
+                    OriginalPrice: 0
+                },
+                computed: {
+                    DiscountPrice: {
+                        get: function () {
+                            return this.OriginalPrice * 0.85;
                         },
-                    }
+                        set: function (val) {
+                            this.OriginalPrice = val / 0.85;
+                        }
+                    },
+                }
             });
         }
 
