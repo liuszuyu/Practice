@@ -9,7 +9,8 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+        rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -68,24 +69,24 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         var db = firebase.database();
-
+        var userChange = true;
+        var time = "";
+        var name = "";
         $(function () {
             db.ref("name").on('value', function (snapshot) {
-                var name = snapshot.val();
-                if(name!="none"){
+                name = snapshot.val();
+                if (name != "none") {
+                    userChange = false;
                     $("#" + name).bootstrapToggle('on');
                 }
-               
+
             });
             db.ref("time").on('value', function (snapshot) {
-                var time = snapshot.val();
+                time = snapshot.val();
                 if (time != "none") {
-                $("#" + name + "Text").text("登入時間:" + time);
-            };
-            
+                    $("#" + name + "Text").text("登入時間:" + time);
+                };
             });
-           
-
         });
 
         function Toggle(self) {
@@ -97,9 +98,9 @@
                     $(".btn-secondary").addClass("btn-success").removeClass("btn-secondary");
                     $("#" + ckID + "Text").text("");
                     db.ref("/name").set("none");
-            db.ref("/time").set("none");
+                    db.ref("/time").set("none");
                 } else {
-                    var time = new Date().toLocaleTimeString();
+                    var newTime = new Date().toLocaleTimeString();
                     if (!ckName[i].checked) {
                         ckName[i].disabled = true;
                     } else {
@@ -108,11 +109,12 @@
                     $(".btn-success").addClass("btn-secondary").removeClass("btn-success");
                     $("#" + ckID + "Text").text("登入時間:" + time);
                     db.ref("/name").set(ckID);
-                    db.ref("/time").set(time);
+                    if (userChange == true) {
+                        db.ref("/time").set(newTime);
+                    }
                 }
             }
         }
-      
     </script>
 </body>
 
