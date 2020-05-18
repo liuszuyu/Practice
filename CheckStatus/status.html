@@ -9,10 +9,8 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
-        rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.5.1.js"
-        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
@@ -27,21 +25,21 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
                             <span class="badge badge-light mr-2">James</span>
-                            <input type="checkbox" data-toggle="toggle" data-on="使用中" data-off="未使用" name="toggles" id="James"
-                                onchange="Toggle(this)" data-onstyle="danger" data-offstyle="success">
+                            <input type="checkbox" data-toggle="toggle" data-on="使用中" data-off="未使用" name="toggles"
+                                id="James" onchange="Toggle(this)" data-onstyle="danger" data-offstyle="success">
                             <span id="JamesText"></span>
                         </li>
                         <li class="list-group-item">
                             <span class="badge badge-light mr-2">Ming</span>
-                            <input type="checkbox" data-toggle="toggle" data-on="使用中" data-off="未使用" name="toggles" id="Ming"
-                                onchange="Toggle(this)" data-onstyle="danger" data-offstyle="success">
-                                <span id="MingText"></span>
+                            <input type="checkbox" data-toggle="toggle" data-on="使用中" data-off="未使用" name="toggles"
+                                id="Ming" onchange="Toggle(this)" data-onstyle="danger" data-offstyle="success">
+                            <span id="MingText"></span>
                         </li>
                         <li class="list-group-item">
                             <span class="badge badge-light mr-2">Mimi</span>
-                            <input type="checkbox" data-toggle="toggle" data-on="使用中" data-off="未使用" name="toggles" id="Mimi"
-                                onchange="Toggle(this)" data-onstyle="danger" data-offstyle="success">
-                                <span id="MimiText"></span>
+                            <input type="checkbox" data-toggle="toggle" data-on="使用中" data-off="未使用" name="toggles"
+                                id="Mimi" onchange="Toggle(this)" data-onstyle="danger" data-offstyle="success">
+                            <span id="MimiText"></span>
                         </li>
                     </ul>
                 </div>
@@ -49,10 +47,44 @@
             <div class="col-l-4-12"></div>
         </div>
     </div>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-app.js"></script>
 
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+    <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-database.js"></script>
     <script>
-        $.getJSON('')
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBJcWkh4apYHOv4FKz714L8b320_1YY1N8",
+            authDomain: "check-24f9b.firebaseapp.com",
+            databaseURL: "https://check-24f9b.firebaseio.com",
+            projectId: "check-24f9b",
+            storageBucket: "check-24f9b.appspot.com",
+            messagingSenderId: "211715726590",
+            appId: "1:211715726590:web:026aadb39baad3dfd499af"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.database();
+
         $(function () {
+            db.ref("name").on('value', function (snapshot) {
+                var name = snapshot.val();
+                if(name!="none"){
+                    $("#" + name).bootstrapToggle('on');
+                }
+               
+            });
+            db.ref("time").on('value', function (snapshot) {
+                var time = snapshot.val();
+                if (time != "none") {
+                $("#" + name + "Text").text("登入時間:" + time);
+            };
+            
+            });
+           
 
         });
 
@@ -63,18 +95,24 @@
                 if (!self.checked) {
                     ckName[i].disabled = false;
                     $(".btn-secondary").addClass("btn-success").removeClass("btn-secondary");
-                    $("#"+ckID+"Text").text("");
+                    $("#" + ckID + "Text").text("");
+                    db.ref("/name").set("none");
+            db.ref("/time").set("none");
                 } else {
+                    var time = new Date().toLocaleTimeString();
                     if (!ckName[i].checked) {
                         ckName[i].disabled = true;
                     } else {
                         ckName[i].disabled = false;
                     }
                     $(".btn-success").addClass("btn-secondary").removeClass("btn-success");
-                    $("#"+ckID+"Text").text("登入時間:" + new Date().toLocaleTimeString());
+                    $("#" + ckID + "Text").text("登入時間:" + time);
+                    db.ref("/name").set(ckID);
+                    db.ref("/time").set(time);
                 }
             }
         }
+      
     </script>
 </body>
 
