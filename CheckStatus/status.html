@@ -107,10 +107,14 @@
                         ckName[i].disabled = false;
                     }
                     $(".btn-success").addClass("btn-secondary").removeClass("btn-success");
-                    $("#" + ckID + "Text").text("登入時間:" + time);
+                    
                     db.ref("/name").set(ckID);
                     if (userChange == true) {
                         db.ref("/time").set(newTime);
+                        $("#" + ckID + "Text").text("登入時間:" + newTime);
+                    }
+                    else{
+                        $("#" + ckID + "Text").text("登入時間:" + time);
                     }
                 }
             }
