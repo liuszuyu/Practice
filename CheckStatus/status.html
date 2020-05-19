@@ -69,23 +69,29 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         var db = firebase.database();
-        var userChange = true;
-        var time = "";
-        var name = "";
+        var flag;
+        var time;
+        var name;
+        var newtime;
         $(function () {
             db.ref("name").on('value', function (snapshot) {
                 name = snapshot.val();
-                if (name != "none") {
-                    userChange = false;
-                    $("#" + name).bootstrapToggle('on');
+                if(name=="none"){
+                    flag=0;
                 }
-
+                if(name!="none"){
+                    $("#" + name).bootstrapToggle('on');
+                    flag++;
+                }
             });
             db.ref("time").on('value', function (snapshot) {
                 time = snapshot.val();
                 if (time != "none") {
                     $("#" + name + "Text").text("登入時間:" + time);
                 };
+                if(time=="none"){
+                    newtime= true;
+                }
             });
         });
 
@@ -100,7 +106,6 @@
                     db.ref("/name").set("none");
                     db.ref("/time").set("none");
                 } else {
-                    var newTime = new Date().toLocaleTimeString();
                     if (!ckName[i].checked) {
                         ckName[i].disabled = true;
                     } else {
@@ -109,13 +114,15 @@
                     $(".btn-success").addClass("btn-secondary").removeClass("btn-success");
                     
                     db.ref("/name").set(ckID);
-                    if (userChange == true) {
-                        db.ref("/time").set(newTime);
-                        $("#" + ckID + "Text").text("登入時間:" + newTime);
-                    }
-                    else{
+                    if(flag==0){
+                        if(newtime==true){
+                            time = new Date().toLocaleTimeString();
+                        }
                         $("#" + ckID + "Text").text("登入時間:" + time);
+                        db.ref("/time").set(time);
                     }
+                       
+                    
                 }
             }
         }
