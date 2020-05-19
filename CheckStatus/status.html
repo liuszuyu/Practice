@@ -20,33 +20,36 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-l-4-12"></div>
-            <div class="col-l-4-12">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
                 <div class="card">
-                    <ul class="list-group list-group-flush">
+                    <ul class="list-group list-group-flush ">
                         <li class="list-group-item">
                             <span class="badge badge-light mr-2">James</span>
                             <input type="checkbox" data-toggle="toggle" data-on="使用中" data-off="未使用" name="toggles"
                                 id="James" onchange="Toggle(this)" data-onstyle="danger" data-offstyle="success">
+                            <input class="m-3" type="text" id="JamesRemark">
                             <span id="JamesText"></span>
                         </li>
                         <li class="list-group-item">
                             <span class="badge badge-light mr-2">Ming</span>
                             <input type="checkbox" data-toggle="toggle" data-on="使用中" data-off="未使用" name="toggles"
                                 id="Ming" onchange="Toggle(this)" data-onstyle="danger" data-offstyle="success">
+                            <input class="m-3" type="text" id="MingRemark">
                             <span id="MingText"></span>
                         </li>
                         <li class="list-group-item">
                             <span class="badge badge-light mr-2">Mimi</span>
                             <input type="checkbox" data-toggle="toggle" data-on="使用中" data-off="未使用" name="toggles"
                                 id="Mimi" onchange="Toggle(this)" data-onstyle="danger" data-offstyle="success">
+                            <input class="m-3" type="text" id="MimiRemark">
                             <span id="MimiText"></span>
                         </li>
                     </ul>
                 </div>
             </div>
-            <div class="col-l-4-12"></div>
-        </div>
+            <div class="col-md-2"></div>
+    </div>
     </div>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-app.js"></script>
@@ -93,7 +96,18 @@
                     newtime= true;
                 }
             });
+            RemarkSync("JamesRemark");
+            RemarkSync("MingRemark");
+            RemarkSync("MimiRemark");
         });
+        function RemarkSync(remarkName){
+            db.ref(remarkName).on('value', function (snapshot) {
+                $("#"+remarkName).val(snapshot.val());
+            });
+            $("#"+remarkName).change(function(){
+                db.ref("/"+remarkName).set($("#"+remarkName).val());
+            });
+        }
 
         function Toggle(self) {
             var ckName = document.getElementsByName(self.name);
